@@ -6,10 +6,8 @@
     <title>Marjan Stoimchev - Machine Learning Researcher</title>
     <meta name="description" content="PhD Researcher specializing in Deep Learning, Computer Vision, and Remote Sensing">
     
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
     
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
@@ -37,6 +35,10 @@
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
             --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
             --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
@@ -123,7 +125,6 @@
         .hero {
             padding: 5rem 0 4rem;
             background: var(--bg-primary);
-            border-bottom: 1px solid var(--border-color);
         }
 
         .hero-container {
@@ -243,22 +244,6 @@
             font-size: 1.05rem;
         }
 
-        .highlight-box {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 1.5rem;
-            border-radius: 12px;
-            margin: 2rem 0;
-            box-shadow: var(--shadow-lg);
-        }
-
-        .highlight-box p {
-            color: white;
-            margin: 0;
-            font-size: 1.1rem;
-            font-weight: 500;
-        }
-
         .research-interests {
             display: flex;
             flex-wrap: wrap;
@@ -303,11 +288,62 @@
         .section-subtitle {
             color: var(--text-secondary);
             font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Tech Toolbox Section */
+        .skills {
+            background: var(--bg-primary);
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+        .skill-card {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+        }
+        .skill-card-header {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        .skill-card-header i {
+            font-size: 1.5rem;
+            color: var(--primary-color);
+        }
+        .skill-card-header h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+        }
+        .skill-card p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+        }
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        .skill-tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'Fira Code', monospace;
+            border: 1px solid var(--border-color);
         }
 
         /* Publications */
         .publications {
-            background: var(--bg-primary);
+            background: var(--bg-secondary);
         }
 
         .publication-item {
@@ -316,7 +352,7 @@
             gap: 2rem;
             padding: 2rem;
             margin-bottom: 1.5rem;
-            background: var(--bg-secondary);
+            background: var(--bg-primary);
             border-radius: 12px;
             border: 1px solid var(--border-color);
             transition: all 0.3s;
@@ -327,7 +363,7 @@
             transform: translateY(-2px);
             border-color: var(--primary-color);
         }
-
+        
         .publication-image {
             display: flex;
             align-items: center;
@@ -344,17 +380,6 @@
             padding: 8px;
         }
 
-        .publication-image.no-image {
-            background: var(--bg-tertiary);
-            border-radius: 8px;
-            min-height: 120px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-light);
-            font-size: 3rem;
-        }
-
         .publication-content h3 {
             font-size: 1.15rem;
             font-weight: 600;
@@ -367,6 +392,7 @@
             color: var(--text-secondary);
             margin-bottom: 1rem;
             line-height: 1.6;
+            font-style: italic;
         }
 
         .publication-meta {
@@ -423,21 +449,23 @@
 
         /* Projects */
         .projects {
-            background: var(--bg-secondary);
+            background: var(--bg-primary);
         }
 
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
             gap: 2rem;
         }
 
         .project-card {
-            background: var(--bg-primary);
+            background: var(--bg-secondary);
             padding: 2rem;
             border-radius: 12px;
             border: 1px solid var(--border-color);
             transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
         }
 
         .project-card:hover {
@@ -464,13 +492,14 @@
         .project-card p {
             color: var(--text-secondary);
             line-height: 1.7;
+            flex-grow: 1;
         }
 
         .project-tech {
             display: flex;
             flex-wrap: wrap;
             gap: 0.5rem;
-            margin-top: 1rem;
+            margin-top: 1.5rem;
         }
 
         .tech-tag {
@@ -480,35 +509,19 @@
             font-size: 0.85rem;
             color: var(--text-secondary);
             font-family: 'Fira Code', monospace;
+            border: 1px solid var(--border-color);
         }
 
         /* Footer */
         footer {
             padding: 3rem 0;
-            background: var(--bg-primary);
+            background: var(--bg-tertiary);
             border-top: 1px solid var(--border-color);
             text-align: center;
         }
 
         .footer-content {
             color: var(--text-secondary);
-        }
-
-        .footer-links {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin-top: 1rem;
-        }
-
-        .footer-links a {
-            color: var(--text-secondary);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .footer-links a:hover {
-            color: var(--primary-color);
         }
 
         /* Responsive Design */
@@ -534,9 +547,16 @@
             .projects-grid {
                 grid-template-columns: 1fr;
             }
+             .skills-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-container {
+                 justify-content: center;
+            }
 
             .nav-links {
-                display: none;
+                display: none; /* Simple hiding for mobile, can be replaced with a hamburger menu */
             }
         }
 
@@ -553,27 +573,32 @@
         }
 
         .fade-in {
-            animation: fadeIn 0.6s ease-out;
+            animation: fadeIn 0.6s ease-out forwards;
+            opacity: 0;
         }
+        
+        .section .fade-in:nth-child(1) { animation-delay: 0.1s; }
+        .section .fade-in:nth-child(2) { animation-delay: 0.2s; }
+        .section .fade-in:nth-child(3) { animation-delay: 0.3s; }
+        .section .fade-in:nth-child(4) { animation-delay: 0.4s; }
+
     </style>
 </head>
 <body>
-    <!-- Navigation -->
     <nav>
         <div class="container">
             <div class="nav-container">
                 <a href="#" class="nav-brand">Marjan Stoimchev</a>
                 <ul class="nav-links">
                     <li><a href="#about">About</a></li>
+                    <li><a href="#skills">Tech Toolbox</a></li>
                     <li><a href="#publications">Publications</a></li>
                     <li><a href="#projects">Projects</a></li>
-                    <li><a href="#contact">Contact</a></li>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section class="hero" id="about">
         <div class="container">
             <div class="hero-container">
@@ -585,19 +610,13 @@
                     <p class="profile-title">PhD Researcher</p>
                     <a href="mailto:marjanstoimcev@gmail.com" class="profile-email">marjanstoimcev@gmail.com</a>
                     <br>
-                    <a href="assets/MsCv.pdf" class="cv-link">
+                     <a href="assets/MsCv.pdf" class="cv-link" target="_blank">
                         <i class="fas fa-file-pdf"></i> Download CV
                     </a>
                     <div class="social-links">
-                        <a href="https://github.com/marjanstoimchev" target="_blank">
-                            <i class="fab fa-github"></i>
-                        </a>
-                        <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en" target="_blank">
-                            <i class="fas fa-graduation-cap"></i>
-                        </a>
-                        <a href="https://www.linkedin.com/in/marjan-stoimchev-636657179/" target="_blank">
-                            <i class="fab fa-linkedin"></i>
-                        </a>
+                        <a href="https://github.com/marjanstoimchev" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                        <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en" target="_blank" aria-label="Google Scholar"><i class="fas fa-graduation-cap"></i></a>
+                        <a href="https://www.linkedin.com/in/marjan-stoimchev-636657179/" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
                     </div>
                 </div>
 
@@ -606,21 +625,19 @@
                     <p class="subtitle">Deep Learning • Computer Vision • Remote Sensing</p>
                     
                     <p>
-                        I am a PhD researcher at the prestigious Jožef Stefan Institute in Ljubljana, Slovenia, specializing in the intersection of machine learning and computer vision. With a Master's degree in Electrical Engineering from the University of Ljubljana, where I received the <strong>Prešern Award for Best Master's Thesis</strong>, I bring a strong foundation in both theoretical and applied AI research.
+                        I am a PhD researcher at the prestigious Jožef Stefan Institute, specializing in the intersection of machine learning and computer vision. With a Master's degree in Electrical Engineering from the University of Ljubljana—where I received the <strong>Prešern Award for Best Master's Thesis</strong>—I bring a strong foundation in both theoretical and applied AI research.
                     </p>
                     
                     <p>
-                        My research focuses on developing innovative deep learning solutions for real-world challenges, particularly in remote sensing image analysis, semi-supervised learning, and self-supervised learning. I am passionate about creating AI systems that can learn efficiently from limited labeled data, making machine learning more accessible and practical for diverse applications.
+                        My work focuses on developing innovative deep learning solutions for real-world challenges, particularly in remote sensing, medical imaging, and material science. I am passionate about creating efficient AI systems that can learn from limited labeled data, making machine learning more accessible and practical for diverse applications.
                     </p>
                     
-
-
                     <div class="research-interests">
                         <span class="interest-tag">Deep Learning</span>
                         <span class="interest-tag">Computer Vision</span>
-                        <span class="interest-tag">Remote Sensing</span>
                         <span class="interest-tag">Self-Supervised Learning</span>
                         <span class="interest-tag">Semi-Supervised Learning</span>
+                        <span class="interest-tag">Remote Sensing</span>
                         <span class="interest-tag">Medical Imaging</span>
                         <span class="interest-tag">Graph Neural Networks</span>
                     </div>
@@ -629,62 +646,103 @@
         </div>
     </section>
 
-    <!-- Publications Section -->
+    <section class="skills section" id="skills">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Tech Toolbox</h2>
+                <p class="section-subtitle">My daily toolkit for building and deploying intelligent systems, from research to production.</p>
+            </div>
+            <div class="skills-grid">
+                <div class="skill-card fade-in">
+                    <div class="skill-card-header">
+                        <i class="fas fa-code"></i>
+                        <h3>Core Programming & Data Science</h3>
+                    </div>
+                    <p>Fluent in Python for data manipulation, statistical analysis, and end-to-end ML pipelines.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Python</span><span class="skill-tag">NumPy</span><span class="skill-tag">SciPy</span><span class="skill-tag">Pandas</span><span class="skill-tag">Matplotlib</span><span class="skill-tag">Scikit-Learn</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-card-header">
+                        <i class="fas fa-robot"></i>
+                        <h3>Deep Learning & CV Frameworks</h3>
+                    </div>
+                    <p>Extensive experience building, training, and optimizing models with modern frameworks.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">PyTorch</span><span class="skill-tag">PyTorch Geometric</span><span class="skill-tag">Keras</span><span class="skill-tag">HuggingFace</span><span class="skill-tag">OpenCV</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-card-header">
+                        <i class="fas fa-microscope"></i>
+                        <h3>Domains & Applications</h3>
+                    </div>
+                    <p>Applying ML to solve complex problems in remote sensing, healthcare, and material science.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Computer Vision</span><span class="skill-tag">Remote Sensing</span><span class="skill-tag">Medical Imaging</span><span class="skill-tag">Cancer Research</span><span class="skill-tag">Material Science</span>
+                    </div>
+                </div>
+                <div class="skill-card fade-in">
+                    <div class="skill-card-header">
+                        <i class="fas fa-cogs"></i>
+                        <h3>Engineering & Tools</h3>
+                    </div>
+                    <p>Proficient in version control, and development best practices for reproducible research.</p>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Git</span><span class="skill-tag">LaTex</span><span class="skill-tag">Matlab/Simulink</span><span class="skill-tag">MS Office</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section class="publications section" id="publications">
         <div class="container">
             <div class="section-header">
-                <h2 class="section-title">Publications</h2>
-                <p class="section-subtitle">Peer-reviewed research in top-tier conferences and journals</p>
+                <h2 class="section-title">Selected Publications</h2>
+                <p class="section-subtitle">A snapshot of my research contributions. For a full list, please see my <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en" target="_blank">Google Scholar</a> profile.</p>
             </div>
 
-            <!-- Publication 1 -->
             <div class="publication-item fade-in">
                 <div class="publication-image">
                     <img src="img/pub/ssl_mae.png" alt="SSL-MAE Framework">
                 </div>
                 <div class="publication-content">
-                    <h3>SSL-MAE: Adaptive Semisupervised Learning Framework for Multilabel Classification of Remote Sensing Images Using Masked Autoencoders</h3>
+                    <h3>SSL-MAE: Adaptive Semisupervised Learning for Multilabel Classification of Remote Sensing Images Using Masked Autoencoders</h3>
                     <p class="publication-description">
-                        Leveraging masked autoencoders with adaptive semi-supervised learning for state-of-the-art remote sensing image classification. This work introduces a novel framework that significantly improves classification accuracy with limited labeled data.
+                       Impact: Introduced a novel framework that significantly improves classification accuracy with limited labeled data by leveraging masked autoencoders.
                     </p>
                     <div class="publication-meta">
-                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Jurica Levatić, Dragi Kocev, Sašo Džeroski</span>
-                        <span class="publication-venue">IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, 2025</span>
+                        <span class="publication-authors"><strong>M. Stoimchev</strong>, J. Levatić, D. Kocev, S. Džeroski</span>
+                        <span class="publication-venue">IEEE JSTARS, 2025</span>
                     </div>
                     <div class="publication-links">
-                        <a href="https://ieeexplore.ieee.org/abstract/document/10595459" target="_blank">
-                            <i class="fas fa-file-alt"></i> Paper
-                        </a>
-                        <a href="https://github.com/marjanstoimchev/SSL-MAE" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
+                        <a href="https://ieeexplore.ieee.org/document/10595459" target="_blank"><i class="fas fa-file-alt"></i> Paper</a>
+                        <a href="https://github.com/marjanstoimchev/SSL-MAE" target="_blank"><i class="fab fa-github"></i> Code</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Publication 2 -->
             <div class="publication-item fade-in">
                 <div class="publication-image">
                     <img src="img/pub/ssl_pcts.png" alt="Semi-supervised Classification">
                 </div>
                 <div class="publication-content">
-                    <h3>Semi-Supervised Multi-Label Classification of Land Use/Land Cover in Remote Sensing Images with Predictive Clustering Trees and Ensembles</h3>
+                    <h3>Semi-Supervised Multi-Label Classification of Land Use/Land Cover in Remote Sensing Images</h3>
                     <p class="publication-description">
-                        Novel approach combining predictive clustering trees with ensemble methods for efficient land use classification with limited labels. This method achieves competitive performance while being computationally efficient.
+                       Impact: Developed a computationally efficient method combining predictive clustering trees with ensembles that achieves competitive land use classification performance.
                     </p>
                     <div class="publication-meta">
-                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Jurica Levatić, Dragi Kocev, Sašo Džeroski</span>
-                        <span class="publication-venue">IEEE Transactions on Geoscience and Remote Sensing, 2024</span>
+                        <span class="publication-authors"><strong>M. Stoimchev</strong>, J. Levatić, D. Kocev, S. Džeroski</span>
+                        <span class="publication-venue">IEEE TGRS, 2024</span>
                     </div>
                     <div class="publication-links">
-                        <a href="https://ieeexplore.ieee.org/abstract/document/10595459" target="_blank">
-                            <i class="fas fa-file-alt"></i> Paper
-                        </a>
+                        <a href="https://ieeexplore.ieee.org/document/10595459" target="_blank"><i class="fas fa-file-alt"></i> Paper</a>
                     </div>
                 </div>
             </div>
 
-            <!-- Publication 3 -->
             <div class="publication-item fade-in">
                 <div class="publication-image">
                     <img src="img/pub/deep_architectures.png" alt="Deep Network Architectures">
@@ -692,49 +750,19 @@
                 <div class="publication-content">
                     <h3>Deep Network Architectures as Feature Extractors for Multi-Label Classification of Remote Sensing Images</h3>
                     <p class="publication-description">
-                        Comprehensive evaluation of deep learning architectures as feature extractors for satellite image understanding. This study provides valuable insights into architecture selection for remote sensing applications.
+                        Impact: Provided a comprehensive evaluation of deep learning architectures as feature extractors, offering valuable insights for architecture selection in remote sensing.
                     </p>
                     <div class="publication-meta">
-                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Dragi Kocev, Sašo Džeroski</span>
+                        <span class="publication-authors"><strong>M. Stoimchev</strong>, D. Kocev, S. Džeroski</span>
                         <span class="publication-venue">Remote Sensing, 2023</span>
                     </div>
                     <div class="publication-links">
-                        <a href="https://www.mdpi.com/2072-4292/15/2/538" target="_blank">
-                            <i class="fas fa-file-alt"></i> Paper
-                        </a>
-                        <a href="https://github.com/marjanstoimchev/RSMLC" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
+                        <a href="https://www.mdpi.com/2072-4292/15/2/538" target="_blank"><i class="fas fa-file-alt"></i> Paper</a>
+                        <a href="https://github.com/marjanstoimchev/RSMLC" target="_blank"><i class="fab fa-github"></i> Code</a>
                     </div>
                 </div>
             </div>
-
-            <!-- Publication 4 -->
-            <div class="publication-item fade-in">
-                <div class="publication-image no-image">
-                    <i class="fas fa-brain"></i>
-                </div>
-                <div class="publication-content">
-                    <h3>Detection of Epilepsy Using Adaptive Neuro-Fuzzy Inference System and Comparative Analysis</h3>
-                    <p class="publication-description">
-                        Applying adaptive neuro-fuzzy systems for automated epilepsy detection from EEG signals. This work demonstrates the potential of hybrid AI approaches in medical diagnostics.
-                    </p>
-                    <div class="publication-meta">
-                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Vesna Ojleska Latkoska</span>
-                        <span class="publication-venue">Complex Systems: Spanning Control and Computational Cybernetics, 2022</span>
-                    </div>
-                    <div class="publication-links">
-                        <a href="#" target="_blank">
-                            <i class="fas fa-file-alt"></i> Paper
-                        </a>
-                        <a href="#" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Publication 5 -->
+            
             <div class="publication-item fade-in">
                 <div class="publication-image">
                     <img src="img/pub/tpa_cnn.png" alt="Palmprint Recognition">
@@ -743,47 +771,87 @@
                     <span class="publication-award">🏆 Prešern Award Winner</span>
                     <h3>Learning to Combine Local and Global Image Information for Contactless Palmprint Recognition</h3>
                     <p class="publication-description">
-                        Novel approach fusing local and global features for robust biometric recognition. This award-winning work advances the field of contactless biometric systems.
+                        Impact: Advanced the field of contactless biometrics with an award-winning approach that fuses local and global features for robust palmprint recognition.
                     </p>
                     <div class="publication-meta">
-                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Marija Ivanovska, Vitomir Štruc</span>
+                        <span class="publication-authors"><strong>M. Stoimchev</strong>, M. Ivanovska, V. Štruc</span>
                         <span class="publication-venue">MDPI Sensors, 2021</span>
                     </div>
                     <div class="publication-links">
-                        <a href="https://www.mdpi.com/1424-8220/22/1/73" target="_blank">
-                            <i class="fas fa-file-alt"></i> Paper
-                        </a>
-                        <a href="https://github.com/marjanstoimchev/tpa-cnn" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Publication 6 -->
-            <div class="publication-item fade-in">
-                <div class="publication-image no-image">
-                    <i class="fas fa-chart-line"></i>
-                </div>
-                <div class="publication-content">
-                    <h3>Feature Space Reduction Using PCA for Epilepsy Detection with Adaptive Neuro-Fuzzy Inference System</h3>
-                    <p class="publication-description">
-                        Dimensionality reduction techniques improving epilepsy detection accuracy and computational efficiency. This work demonstrates the importance of feature engineering in medical AI applications.
-                    </p>
-                    <div class="publication-meta">
-                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Vesna Ojleska Latkoska</span>
-                        <span class="publication-venue">Acta Polytechnica Hungarica, 2020</span>
-                    </div>
-                    <div class="publication-links">
-                        <a href="#" target="_blank">
-                            <i class="fas fa-file-alt"></i> Paper
-                        </a>
-                        <a href="#" target="_blank">
-                            <i class="fab fa-github"></i> Code
-                        </a>
+                        <a href="https://www.mdpi.com/1424-8220/22/1/73" target="_blank"><i class="fas fa-file-alt"></i> Paper</a>
+                        <a href="https://github.com/marjanstoimchev/tpa-cnn" target="_blank"><i class="fab fa-github"></i> Code</a>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
+    <section class="projects section" id="projects">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Projects</h2>
+                <p class="section-subtitle">Hands-on experience in leading and collaborating on impactful machine learning projects.</p>
+            </div>
+            <div class="projects-grid">
+                <div class="project-card fade-in">
+                    <h3><i class="fas fa-microscope project-icon"></i> AI for Cancer Research</h3>
+                    <p>
+                        Developed and deployed self-supervised models (DinoV2, MAEs) for multiplex immunofluorescence whole slide image analysis. The project included embedding space analysis, neighborhood detection, and image retrieval, culminating in an end-to-end model for clinical applications.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Self-Supervised Learning</span>
+                        <span class="tech-tag">DinoV2</span>
+                        <span class="tech-tag">Medical Imaging</span>
+                        <span class="tech-tag">PyTorch</span>
+                        <span class="tech-tag">Cancer Research</span>
+                    </div>
+                </div>
+                <div class="project-card fade-in">
+                    <h3><i class="fas fa-atom project-icon"></i> Atomic-Resolution Microscopy</h3>
+                    <p>
+                        Led the development of a deep learning solution to correct drift distortions in atomically resolved STEM images. This method significantly reduced image acquisition time and cost and was adopted as a standard process in the lab's imaging operations.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Deep Learning</span>
+                        <span class="tech-tag">Image Reconstruction</span>
+                        <span class="tech-tag">Material Science</span>
+                        <span class="tech-tag">OpenCV</span>
+                        <span class="tech-tag">PyTorch</span>
+                    </div>
+                </div>
+                <div class="project-card fade-in">
+                    <h3><i class="fas fa-network-wired project-icon"></i> Hierarchical Remote Sensing with GNNs</h3>
+                    <p>
+                        Engineered a novel approach using Graph Neural Networks (GNNs) for hierarchical multi-label classification of large-scale remote sensing images, improving the granularity and accuracy of land use analysis.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Graph Neural Networks</span>
+                        <span class="tech-tag">PyTorch Geometric</span>
+                        <span class="tech-tag">Remote Sensing</span>
+                        <span class="tech-tag">Hierarchical Classification</span>
+                    </div>
+                </div>
+                <div class="project-card fade-in">
+                    <h3><i class="fas fa-brain project-icon"></i> Brain Tumor Radiogenomic Classification</h3>
+                    <p>
+                       Contributed to a project focused on classifying brain tumors from radiogenomic data. This involved processing complex medical imaging datasets and applying machine learning models to predict tumor characteristics.
+                    </p>
+                    <div class="project-tech">
+                        <span class="tech-tag">Medical Imaging</span>
+                        <span class="tech-tag">Classification</span>
+                        <span class="tech-tag">Scikit-Learn</span>
+                        <span class="tech-tag">Python</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container footer-content">
+            <p>&copy; 2025 Marjan Stoimchev. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
