@@ -1,0 +1,38 @@
+body {
+    font-family: 'Lato', sans-serif;
+    line-height: 1.6;
+}
+
+.publication {
+    margin-bottom: 1rem;
+}
+
+.publication img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+}
+
+.publication p {
+    margin-bottom: 0.5rem;
+}
+
+.container-md {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+h2 {
+    color: #333;
+    font-weight: 400;
+}
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #23527c;
+    text-decoration: underline;
+}
