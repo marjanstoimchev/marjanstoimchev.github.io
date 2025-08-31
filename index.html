@@ -1,288 +1,794 @@
-# Complete Custom Portfolio Files
-
-## index.html
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Marjan Stoimchev</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="PhD Researcher in Machine Learning & Remote Sensing at Jožef Stefan Institute">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Marjan Stoimchev - Machine Learning Researcher</title>
+    <meta name="description" content="PhD Researcher specializing in Deep Learning, Computer Vision, and Remote Sensing">
     
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="main.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Lato">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-color: #2563eb;
+            --primary-dark: #1e40af;
+            --accent-color: #0891b2;
+            --text-primary: #111827;
+            --text-secondary: #6b7280;
+            --text-light: #9ca3af;
+            --bg-primary: #ffffff;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #f3f4f6;
+            --border-color: #e5e7eb;
+            --success-color: #10b981;
+            --warning-color: #f59e0b;
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            color: var(--text-primary);
+            background-color: var(--bg-secondary);
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
+        }
+
+        .nav-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.25rem 0;
+        }
+
+        .nav-brand {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .nav-brand:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.95rem;
+            transition: color 0.2s;
+            position: relative;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--primary-color);
+            transition: width 0.3s;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            padding: 5rem 0 4rem;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .hero-container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            gap: 4rem;
+            align-items: start;
+        }
+
+        .profile-section {
+            text-align: center;
+        }
+
+        .profile-image-wrapper {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .profile-image {
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--bg-tertiary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .profile-name {
+            font-size: 1.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .profile-title {
+            font-size: 1rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+
+        .profile-email {
+            color: var(--primary-color);
+            text-decoration: none;
+            font-size: 0.95rem;
+            margin-bottom: 1rem;
+            display: inline-block;
+        }
+
+        .profile-email:hover {
+            text-decoration: underline;
+        }
+
+        .cv-link {
+            display: inline-block;
+            padding: 0.5rem 1.25rem;
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            margin-bottom: 1.5rem;
+        }
+
+        .cv-link:hover {
+            background: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .social-links {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+
+        .social-links a {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+            text-decoration: none;
+        }
+
+        .social-links a:hover {
+            background: var(--primary-color);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-md);
+        }
+
+        .hero-content h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: var(--text-primary);
+            line-height: 1.2;
+        }
+
+        .hero-content .subtitle {
+            font-size: 1.25rem;
+            color: var(--primary-color);
+            margin-bottom: 2rem;
+            font-weight: 500;
+        }
+
+        .hero-content p {
+            color: var(--text-secondary);
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+            font-size: 1.05rem;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin: 2rem 0;
+            box-shadow: var(--shadow-lg);
+        }
+
+        .highlight-box p {
+            color: white;
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .research-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 2rem;
+        }
+
+        .interest-tag {
+            padding: 0.5rem 1rem;
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            transition: all 0.2s;
+        }
+
+        .interest-tag:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        /* Section Headers */
+        .section {
+            padding: 4rem 0;
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .section-subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+
+        /* Publications */
+        .publications {
+            background: var(--bg-primary);
+        }
+
+        .publication-item {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 2rem;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .publication-item:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+        }
+
+        .publication-image {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .publication-image img {
+            width: 100%;
+            max-width: 180px;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background: white;
+            padding: 8px;
+        }
+
+        .publication-image.no-image {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            min-height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-light);
+            font-size: 3rem;
+        }
+
+        .publication-content h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .publication-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .publication-meta {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .publication-authors {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        .publication-venue {
+            color: var(--accent-color);
+            font-weight: 500;
+        }
+
+        .publication-award {
+            display: inline-block;
+            background: linear-gradient(135deg, #fbbf24, #f59e0b);
+            color: white;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .publication-links {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .publication-links a {
+            padding: 0.4rem 1rem;
+            background: var(--bg-tertiary);
+            color: var(--text-secondary);
+            text-decoration: none;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+            border: 1px solid var(--border-color);
+        }
+
+        .publication-links a:hover {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+        }
+
+        /* Projects */
+        .projects {
+            background: var(--bg-secondary);
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            background: var(--bg-primary);
+            padding: 2rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            transition: all 0.3s;
+        }
+
+        .project-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-2px);
+            border-color: var(--primary-color);
+        }
+
+        .project-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .project-icon {
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .project-card p {
+            color: var(--text-secondary);
+            line-height: 1.7;
+        }
+
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        .tech-tag {
+            padding: 0.25rem 0.75rem;
+            background: var(--bg-tertiary);
+            border-radius: 15px;
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+            font-family: 'Fira Code', monospace;
+        }
+
+        /* Footer */
+        footer {
+            padding: 3rem 0;
+            background: var(--bg-primary);
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        .footer-content {
+            color: var(--text-secondary);
+        }
+
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary-color);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-container {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .hero-content h1 {
+                font-size: 2rem;
+            }
+
+            .publication-item {
+                grid-template-columns: 1fr;
+            }
+
+            .publication-image {
+                max-width: 200px;
+                margin: 0 auto;
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .nav-links {
+                display: none;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.6s ease-out;
+        }
+    </style>
 </head>
 <body>
-    
-    <!-- Profile Section -->
-    <div class="container-md my-3 border py-4">
-        <div class="row align-items-center justify-content-center">
-            <div class="col-md-3 px-4">
-                <div class="text-center">
-                    <img src="assets/img/marjan_image.jpg" class="img-fluid rounded-circle pb-2" alt="Marjan Stoimchev">
-                    <div class="text-center-fluid">
-                        <h2 style="margin-bottom: 0;">Marjan Stoimchev</h2>
-                        <p style="margin-bottom: 0;">marjanstoimcev@gmail.com</p>
-                        <p style="margin-bottom: 5pt;">
-                            <a href="assets/MsCv.pdf">CV</a>
+    <!-- Navigation -->
+    <nav>
+        <div class="container">
+            <div class="nav-container">
+                <a href="#" class="nav-brand">Marjan Stoimchev</a>
+                <ul class="nav-links">
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#publications">Publications</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="about">
+        <div class="container">
+            <div class="hero-container">
+                <div class="profile-section">
+                    <div class="profile-image-wrapper">
+                        <img src="assets/img/marjan_image.jpg" alt="Marjan Stoimchev" class="profile-image">
+                    </div>
+                    <h2 class="profile-name">Marjan Stoimchev</h2>
+                    <p class="profile-title">PhD Researcher</p>
+                    <a href="mailto:marjanstoimcev@gmail.com" class="profile-email">marjanstoimcev@gmail.com</a>
+                    <br>
+                    <a href="assets/MsCv.pdf" class="cv-link">
+                        <i class="fas fa-file-pdf"></i> Download CV
+                    </a>
+                    <div class="social-links">
+                        <a href="https://github.com/marjanstoimchev" target="_blank">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en" target="_blank">
+                            <i class="fas fa-graduation-cap"></i>
+                        </a>
+                        <a href="https://www.linkedin.com/in/marjan-stoimchev-636657179/" target="_blank">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="hero-content">
+                    <h1>Machine Learning Researcher</h1>
+                    <p class="subtitle">Deep Learning • Computer Vision • Remote Sensing</p>
+                    
+                    <p>
+                        I am a PhD researcher at the prestigious Jožef Stefan Institute in Ljubljana, Slovenia, specializing in the intersection of machine learning and computer vision. With a Master's degree in Electrical Engineering from the University of Ljubljana, where I received the <strong>Prešern Award for Best Master's Thesis</strong>, I bring a strong foundation in both theoretical and applied AI research.
+                    </p>
+                    
+                    <p>
+                        My research focuses on developing innovative deep learning solutions for real-world challenges, particularly in remote sensing image analysis, semi-supervised learning, and self-supervised learning. I am passionate about creating AI systems that can learn efficiently from limited labeled data, making machine learning more accessible and practical for diverse applications.
+                    </p>
+
+                    <div class="highlight-box">
+                        <p>
+                            <i class="fas fa-briefcase"></i> Currently completing my PhD and actively seeking ML/AI research opportunities in industry.
+                            I'm excited to bring my expertise in deep learning and computer vision to innovative teams working on cutting-edge problems.
                         </p>
-                        <p style="margin-bottom: 0;">
-                            <a href="https://github.com/marjanstoimchev"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/github.svg" height="25"></a>
-                            <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/googlescholar.svg" height="25"></a>
-                            <a href="https://www.linkedin.com/in/marjan-stoimchev-636657179/"><img src="https://cdn.jsdelivr.net/npm/simple-icons@v9/icons/linkedin.svg" height="25"></a>
-                        </p>
+                    </div>
+
+                    <div class="research-interests">
+                        <span class="interest-tag">Deep Learning</span>
+                        <span class="interest-tag">Computer Vision</span>
+                        <span class="interest-tag">Remote Sensing</span>
+                        <span class="interest-tag">Self-Supervised Learning</span>
+                        <span class="interest-tag">Semi-Supervised Learning</span>
+                        <span class="interest-tag">Medical Imaging</span>
+                        <span class="interest-tag">Graph Neural Networks</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Publications Section -->
+    <section class="publications section" id="publications">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Publications</h2>
+                <p class="section-subtitle">Peer-reviewed research in top-tier conferences and journals</p>
+            </div>
+
+            <!-- Publication 1 -->
+            <div class="publication-item fade-in">
+                <div class="publication-image">
+                    <img src="img/pub/ssl_mae.png" alt="SSL-MAE Framework">
+                </div>
+                <div class="publication-content">
+                    <h3>SSL-MAE: Adaptive Semisupervised Learning Framework for Multilabel Classification of Remote Sensing Images Using Masked Autoencoders</h3>
+                    <p class="publication-description">
+                        Leveraging masked autoencoders with adaptive semi-supervised learning for state-of-the-art remote sensing image classification. This work introduces a novel framework that significantly improves classification accuracy with limited labeled data.
+                    </p>
+                    <div class="publication-meta">
+                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Jurica Levatić, Dragi Kocev, Sašo Džeroski</span>
+                        <span class="publication-venue">IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, 2025</span>
+                    </div>
+                    <div class="publication-links">
+                        <a href="https://ieeexplore.ieee.org/abstract/document/10595459" target="_blank">
+                            <i class="fas fa-file-alt"></i> Paper
+                        </a>
+                        <a href="https://github.com/marjanstoimchev/SSL-MAE" target="_blank">
+                            <i class="fab fa-github"></i> Code
+                        </a>
                     </div>
                 </div>
             </div>
 
-            <div class="col-md-7 px-4 py-4">
-                <div class="text-center">
-                    <p align="justify">
-                        I am a PhD researcher at the <a href="https://www.ijs.si/ijsw/JSI">Jožef Stefan Institute</a>, where I am advised by <a href="http://kt.ijs.si/SasoDzeroski/">Sašo Džeroski</a> and <a href="http://kt.ijs.si/DragiKocev/">Dragi Kocev</a>. I received my MSc in Electrical Engineering from the University of Ljubljana, where I was awarded the <b>Prešern Award for Best Master's Thesis</b>.
+            <!-- Publication 2 -->
+            <div class="publication-item fade-in">
+                <div class="publication-image">
+                    <img src="img/pub/ssl_pcts.png" alt="Semi-supervised Classification">
+                </div>
+                <div class="publication-content">
+                    <h3>Semi-Supervised Multi-Label Classification of Land Use/Land Cover in Remote Sensing Images with Predictive Clustering Trees and Ensembles</h3>
+                    <p class="publication-description">
+                        Novel approach combining predictive clustering trees with ensemble methods for efficient land use classification with limited labels. This method achieves competitive performance while being computationally efficient.
                     </p>
-                    <p align="justify">
-                        My main research interests are in <b>machine learning</b> and <b>computer vision</b>. I focus on the intersection of <b>remote sensing image analysis</b>, <b>semi-supervised learning</b>, <b>self-supervised learning</b>, and <b>deep learning</b>. My work explores how these areas can complement each other to develop systems capable of efficiently learning rich representations from limited labeled data in geospatial applications.
+                    <div class="publication-meta">
+                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Jurica Levatić, Dragi Kocev, Sašo Džeroski</span>
+                        <span class="publication-venue">IEEE Transactions on Geoscience and Remote Sensing, 2024</span>
+                    </div>
+                    <div class="publication-links">
+                        <a href="https://ieeexplore.ieee.org/abstract/document/10595459" target="_blank">
+                            <i class="fas fa-file-alt"></i> Paper
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publication 3 -->
+            <div class="publication-item fade-in">
+                <div class="publication-image">
+                    <img src="img/pub/deep_architectures.png" alt="Deep Network Architectures">
+                </div>
+                <div class="publication-content">
+                    <h3>Deep Network Architectures as Feature Extractors for Multi-Label Classification of Remote Sensing Images</h3>
+                    <p class="publication-description">
+                        Comprehensive evaluation of deep learning architectures as feature extractors for satellite image understanding. This study provides valuable insights into architecture selection for remote sensing applications.
                     </p>
-                    <p align="justify">
-                        <b>I am currently completing my PhD and actively seeking AI/ML research opportunities in industry.<br>
-                        Please reach out if you think I could be a good fit!</b>
+                    <div class="publication-meta">
+                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Dragi Kocev, Sašo Džeroski</span>
+                        <span class="publication-venue">Remote Sensing, 2023</span>
+                    </div>
+                    <div class="publication-links">
+                        <a href="https://www.mdpi.com/2072-4292/15/2/538" target="_blank">
+                            <i class="fas fa-file-alt"></i> Paper
+                        </a>
+                        <a href="https://github.com/marjanstoimchev/RSMLC" target="_blank">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publication 4 -->
+            <div class="publication-item fade-in">
+                <div class="publication-image no-image">
+                    <i class="fas fa-brain"></i>
+                </div>
+                <div class="publication-content">
+                    <h3>Detection of Epilepsy Using Adaptive Neuro-Fuzzy Inference System and Comparative Analysis</h3>
+                    <p class="publication-description">
+                        Applying adaptive neuro-fuzzy systems for automated epilepsy detection from EEG signals. This work demonstrates the potential of hybrid AI approaches in medical diagnostics.
                     </p>
+                    <div class="publication-meta">
+                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Vesna Ojleska Latkoska</span>
+                        <span class="publication-venue">Complex Systems: Spanning Control and Computational Cybernetics, 2022</span>
+                    </div>
+                    <div class="publication-links">
+                        <a href="#" target="_blank">
+                            <i class="fas fa-file-alt"></i> Paper
+                        </a>
+                        <a href="#" target="_blank">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publication 5 -->
+            <div class="publication-item fade-in">
+                <div class="publication-image">
+                    <img src="img/pub/tpa_cnn.png" alt="Palmprint Recognition">
+                </div>
+                <div class="publication-content">
+                    <span class="publication-award">🏆 Prešern Award Winner</span>
+                    <h3>Learning to Combine Local and Global Image Information for Contactless Palmprint Recognition</h3>
+                    <p class="publication-description">
+                        Novel approach fusing local and global features for robust biometric recognition. This award-winning work advances the field of contactless biometric systems.
+                    </p>
+                    <div class="publication-meta">
+                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Marija Ivanovska, Vitomir Štruc</span>
+                        <span class="publication-venue">MDPI Sensors, 2021</span>
+                    </div>
+                    <div class="publication-links">
+                        <a href="https://www.mdpi.com/1424-8220/22/1/73" target="_blank">
+                            <i class="fas fa-file-alt"></i> Paper
+                        </a>
+                        <a href="https://github.com/marjanstoimchev/tpa-cnn" target="_blank">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Publication 6 -->
+            <div class="publication-item fade-in">
+                <div class="publication-image no-image">
+                    <i class="fas fa-chart-line"></i>
+                </div>
+                <div class="publication-content">
+                    <h3>Feature Space Reduction Using PCA for Epilepsy Detection with Adaptive Neuro-Fuzzy Inference System</h3>
+                    <p class="publication-description">
+                        Dimensionality reduction techniques improving epilepsy detection accuracy and computational efficiency. This work demonstrates the importance of feature engineering in medical AI applications.
+                    </p>
+                    <div class="publication-meta">
+                        <span class="publication-authors"><strong>Marjan Stoimchev</strong>, Vesna Ojleska Latkoska</span>
+                        <span class="publication-venue">Acta Polytechnica Hungarica, 2020</span>
+                    </div>
+                    <div class="publication-links">
+                        <a href="#" target="_blank">
+                            <i class="fas fa-file-alt"></i> Paper
+                        </a>
+                        <a href="#" target="_blank">
+                            <i class="fab fa-github"></i> Code
+                        </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    </section>
 
-    <!-- Publications Section -->
-    <div class="container-md p-3 my-3 border">
-        <h2 class="text-center">Publications</h2>
-
-        <!-- Publication 1 -->
-        <div class="publication">
-            <div class="row justify-content-center mb-2">
-                <div class="col-auto p-0">
-                    <br>
-                    <img src="img/pub/ssl_mae.png" class="img-fluid" alt="SSL-MAE Framework" style="max-width: 250px">
-                </div>
-                <div class="col-8 py-4">
-                    <p><b>SSL-MAE: Adaptive Semisupervised Learning Framework for Multilabel Classification of Remote Sensing Images Using Masked Autoencoders</b></p>
-                    <p>Leveraging masked autoencoders with adaptive semi-supervised learning for state-of-the-art remote sensing image classification.</p>
-                    <p><b>Marjan Stoimchev</b>, Jurica Levatic, <a href="http://kt.ijs.si/DragiKocev/">Dragi Kocev</a>, <a href="http://kt.ijs.si/SasoDzeroski/">Sašo Džeroski</a></p>
-                    <p>IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing 2025</p>
-                    <p><a href="https://ieeexplore.ieee.org/abstract/document/10595459">paper</a> / <a href="https://github.com/marjanstoimchev/SSL-MAE">code</a></p>
-                </div>
-            </div>
-        </div>
-        <hr>
-
-        <!-- Publication 2 -->
-        <div class="publication">
-            <div class="row justify-content-center mb-2">
-                <div class="col-auto p-0">
-                    <br>
-                    <img src="img/pub/ssl_pcts.png" class="img-fluid" alt="Semi-supervised Classification" style="max-width: 250px">
-                </div>
-                <div class="col-8 py-4">
-                    <p><b>Semi-Supervised Multi-Label Classification of Land Use/Land Cover in Remote Sensing Images with Predictive Clustering Trees and Ensembles</b></p>
-                    <p>Novel approach combining predictive clustering trees with ensemble methods for efficient land use classification with limited labels.</p>
-                    <p><b>Marjan Stoimchev</b>, Jurica Levatić, <a href="http://kt.ijs.si/DragiKocev/">Dragi Kocev</a>, <a href="http://kt.ijs.si/SasoDzeroski/">Sašo Džeroski</a></p>
-                    <p>IEEE Transactions on Geoscience and Remote Sensing 2024</p>
-                    <p><a href="https://ieeexplore.ieee.org/abstract/document/10595459">paper</a></p>
-                </div>
-            </div>
-        </div>
-        <hr>
-
-        <!-- Publication 3 -->
-        <div class="publication">
-            <div class="row justify-content-center mb-2">
-                <div class="col-auto p-0">
-                    <br>
-                    <img src="img/pub/deep_architectures.png" class="img-fluid" alt="Deep Network Architectures" style="max-width: 250px">
-                </div>
-                <div class="col-8 py-4">
-                    <p><b>Deep Network Architectures as Feature Extractors for Multi-Label Classification of Remote Sensing Images</b></p>
-                    <p>Comprehensive evaluation of deep learning architectures as feature extractors for satellite image understanding.</p>
-                    <p><b>Marjan Stoimchev</b>, <a href="http://kt.ijs.si/DragiKocev/">Dragi Kocev</a>, <a href="http://kt.ijs.si/SasoDzeroski/">Sašo Džeroski</a></p>
-                    <p>Remote Sensing 2023</p>
-                    <p><a href="https://www.mdpi.com/2072-4292/15/2/538">paper</a> / <a href="https://github.com/marjanstoimchev/RSMLC">code</a></p>
-                </div>
-            </div>
-        </div>
-        <hr>
-
-        <!-- Publication 4 -->
-        <div class="publication">
-            <div class="row justify-content-center mb-2">
-                <div class="col-auto p-0">
-                    <br>
-                    <img src="img/pub/epilepsy_detection_2022.png" class="img-fluid" alt="Epilepsy Detection" style="max-width: 150px">
-                </div>
-                <div class="col-8 py-4">
-                    <p><b>Detection of Epilepsy Using Adaptive Neuro-Fuzzy Inference System and Comparative Analysis</b></p>
-                    <p>Applying adaptive neuro-fuzzy systems for automated epilepsy detection from EEG signals.</p>
-                    <p><b>Marjan Stoimchev</b>, Vesna Ojleska Latkoska</p>
-                    <p>Complex Systems: Spanning Control and Computational Cybernetics 2022</p>
-                    <p><a href="#">paper</a> / <a href="#">code</a></p>
-                </div>
-            </div>
-        </div>
-        <hr>
-
-        <!-- Publication 5 -->
-        <div class="publication">
-            <div class="row justify-content-center mb-2">
-                <div class="col-auto p-0">
-                    <br>
-                    <img src="img/pub/tpa_cnn.png" class="img-fluid" alt="Palmprint Recognition" style="max-width: 200px">
-                </div>
-                <div class="col-8 py-4">
-                    <p><b>Learning to Combine Local and Global Image Information for Contactless Palmprint Recognition</b></p>
-                    <p><b>🏆 Prešern Award Winner</b> - Novel approach fusing local and global features for robust biometric recognition.</p>
-                    <p><b>Marjan Stoimchev</b>, Marija Ivanovska, Vitomir Štruc</p>
-                    <p>MDPI Sensors 2021</p>
-                    <p><a href="https://www.mdpi.com/1424-8220/22/1/73">paper</a> / <a href="https://github.com/marjanstoimchev/tpa-cnn">code</a></p>
-                </div>
-            </div>
-        </div>
-        <hr>
-
-        <!-- Publication 6 -->
-        <div class="publication">
-            <div class="row justify-content-center mb-2">
-                <div class="col-auto p-0">
-                    <br>
-                    <img src="img/pub/pca_epilepsy_2020.png" class="img-fluid" alt="PCA Epilepsy Detection" style="max-width: 150px">
-                </div>
-                <div class="col-8 py-4">
-                    <p><b>Feature Space Reduction Using PCA for Epilepsy Detection with Adaptive Neuro-Fuzzy Inference System</b></p>
-                    <p>Dimensionality reduction techniques improving epilepsy detection accuracy and computational efficiency.</p>
-                    <p><b>Marjan Stoimchev</b>, Vesna Ojleska Latkoska</p>
-                    <p>Acta Polytechnica Hungarica 2020</p>
-                    <p><a href="#">paper</a> / <a href="#">code</a></p>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- Projects Section -->
-    <div class="container-md p-3 my-3 border">
-        <h2 class="text-center">Selected Projects</h2>
-        
-        <div class="project mb-4">
-            <h5><b>Deep Learning for Multiplex Immunofluorescence Imaging</b></h5>
-            <p>Developing self-supervised models (DinoV2, DinoV3, masked autoencoders) for whole slide image analysis in cancer research, including embedding space analysis, neighborhood detection, image retrieval, clustering algorithms, and transition analysis for clinical applications.</p>
-        </div>
-
-        <div class="project mb-4">
-            <h5><b>STEM Image Drift Correction</b></h5>
-            <p>Led development of deep learning solution for drift correction in atomically resolved Scanning Transmission Electron Microscopy images. The approach significantly reduced acquisition time and improved image quality, becoming standard practice in imaging operations.</p>
-        </div>
-
-        <div class="project mb-4">
-            <h5><b>Hierarchical Multi-label Remote Sensing Classification</b></h5>
-            <p>Implemented graph neural networks for hierarchical classification of satellite images, combining classical machine learning with deep learning methods to handle complex spatial relationships and taxonomic structures.</p>
-        </div>
-
-        <div class="project mb-4">
-            <h5><b>Zero-shot Image Segmentation for Nanomagnetic Particles</b></h5>
-            <p>Developed segmentation methods for analysis of nanomagnetic particles without requiring labeled training data, enabling automated materials analysis workflows.</p>
-        </div>
-    </div>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-</body>
-</html>
-```
-
-## main.css
-```css
-body {
-    font-family: 'Lato', sans-serif;
-    line-height: 1.6;
-    background-color: #f8f9fa;
-}
-
-.container-md {
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border-radius: 8px;
-    border: 1px solid #e9ecef !important;
-}
-
-.publication {
-    margin-bottom: 1rem;
-}
-
-.publication img {
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    padding: 5px;
-    background-color: #fff;
-}
-
-.publication p {
-    margin-bottom: 0.5rem;
-}
-
-.project {
-    border-left: 4px solid #007bff;
-    padding-left: 15px;
-}
-
-h2 {
-    color: #333;
-    font-weight: 400;
-    margin-bottom: 1.5rem;
-}
-
-h5 {
-    color: #333;
-    font-weight: 500;
-}
-
-a {
-    color: #337ab7;
-    text-decoration: none;
-}
-
-a:hover {
-    color: #23527c;
-    text-decoration: underline;
-}
-
-.rounded-circle {
-    border: 3px solid #e9ecef;
-}
-
-/* Social media icons styling */
-p a img {
-    margin: 0 5px;
-    filter: grayscale(30%);
-    transition: filter 0.3s ease;
-}
-
-p a img:hover {
-    filter: grayscale(0%);
-}
-
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .col-md-3, .col-md-7 {
-        text-align: center;
-    }
-    
-    .publication .row {
-        flex-direction: column;
-        align-items: center;
-    }
-    
-    .publication .col-8 {
-        text-align: center;
-        margin-top: 1rem;
-    }
-}
