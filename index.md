@@ -15,7 +15,7 @@ layout: home
     </p>
   </div>
   <div style="text-align: center;">
-    <img src="/assets/img/marjan_img.jpg" alt="Marjan Stoimchev" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
+    <img src="/assets/img/marjan_image.jpg" alt="Marjan Stoimchev" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
   </div>
 </div>
 
