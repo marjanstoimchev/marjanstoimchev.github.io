@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Marjan Stoimchev | AI Research & ML Engineer</title>
-  <meta name="description" content="PhD researcher specializing in data‑efficient deep learning, computer vision, and remote sensing." />
+  <title>Marjan Stoimchev | PhD Researcher in AI & ML Engineer</title>
+  <meta name="description" content="PhD researcher at the Department of Knowledge Technologies, Jožef Stefan Institute. Specializing in supervised, semi-supervised, and self-supervised learning across remote sensing, oncology imaging, and digital pathology." />
 
   <!-- Fonts & Icons -->
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -12,481 +12,195 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" />
 
   <style>
-    /* ============================
-       Design System (HSL + Themes)
-       ============================ */
+    /* =========================
+       Design System (Variables)
+       ========================= */
     :root {
-      /* spacing & radius */
-      --space-1: .25rem; --space-2: .5rem; --space-3: .75rem; --space-4: 1rem; --space-5: 1.5rem; --space-6: 2rem; --space-7: 3rem; --space-8: 4rem;
-      --radius-sm: 10px; --radius: 14px; --radius-lg: 20px; --radius-xl: 28px; --radius-2xl: 32px;
-      --container: 1200px;
-
-      /* light theme baseline */
-      --bg: hsl(0 0% 100%);
-      --bg-elev: hsl(210 20% 98%);
-      --bg-glass: 255, 255, 255; /* rgb for alpha use */
-      --text: hsl(222 47% 11%);
-      --text-2: hsl(218 18% 35%);
-      --text-3: hsl(217 15% 55%);
-      --border: hsl(220 13% 91%);
-
-      /* brand gradient: blue → violet → cyan */
       --brand-1: hsl(226 78% 55%);
       --brand-2: hsl(262 83% 60%);
       --brand-3: hsl(193 90% 45%);
-
-      /* accents */
-      --ok: hsl(160 84% 40%);
-      --warn: hsl(40 96% 55%);
-      --chip: hsl(220 15% 96%);
-
-      /* effects */
+      --bg: #ffffff;
+      --bg-elev: #f9fafb;
+      --text: #111827;
+      --text-2: #4b5563;
+      --text-3: #9ca3af;
+      --border: #e5e7eb;
+      --radius-lg: 14px;
+      --ease: cubic-bezier(.22,.61,.36,1);
       --shadow-sm: 0 1px 2px rgba(0,0,0,.05);
       --shadow-md: 0 10px 20px rgba(0,0,0,.07);
       --shadow-lg: 0 25px 60px rgba(0,0,0,.12);
-
-      /* typography */
-      --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-      --font-mono: "Fira Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
-
-      /* motion */
-      --ease: cubic-bezier(.22,.61,.36,1);
-    }
-
-    /* dark theme */
-    @media (prefers-color-scheme: dark) {
-      :root { color-scheme: dark; }
+      --font-sans: "Inter", system-ui, sans-serif;
+      --font-mono: "Fira Code", monospace;
     }
 
     [data-theme="dark"] {
       --bg: hsl(222 21% 8%);
       --bg-elev: hsl(222 16% 11%);
-      --bg-glass: 12, 17, 26;
       --text: hsl(220 20% 96%);
       --text-2: hsl(220 15% 72%);
       --text-3: hsl(220 10% 55%);
       --border: hsl(220 9% 22%);
-      --chip: hsl(220 10% 16%);
       --shadow-sm: 0 1px 2px rgba(0,0,0,.35);
       --shadow-md: 0 10px 20px rgba(0,0,0,.45);
       --shadow-lg: 0 25px 60px rgba(0,0,0,.6);
     }
 
-    /* Base reset */
-    *, *::before, *::after { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
     body {
-      margin: 0; color: var(--text); background: var(--bg); line-height: 1.65;
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
       font-family: var(--font-sans);
-      -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
-    }
-    img { max-width: 100%; display: block; }
-    a { color: inherit; text-decoration: none; }
-
-    /* Utilities */
-    .container { max-width: var(--container); margin-inline: auto; padding-inline: clamp(16px, 4vw, 28px); }
-    .btn {
-      display: inline-flex; align-items: center; gap: .6rem; font-weight: 600; padding: .75rem 1.1rem; border-radius: var(--radius);
-      position: relative; isolation: isolate; transition: transform .2s var(--ease), box-shadow .3s var(--ease);
-      background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color: #fff; box-shadow: var(--shadow-md);
-    }
-    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-lg); }
-    .btn.ghost { background: transparent; color: var(--text); border: 1px solid var(--border); }
-
-    /* Fancy gradient text */
-    .gradient-text {
-      background: linear-gradient(90deg, var(--brand-1), var(--brand-2), var(--brand-3));
-      -webkit-background-clip: text; background-clip: text; color: transparent;
+      line-height: 1.65;
     }
 
-    /* App Bar */
+    a { text-decoration: none; color: inherit; }
+
+    /* Container */
+    .container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+
+    /* Header */
     .appbar {
-      position: sticky; top: 0; z-index: 40; backdrop-filter: saturate(1.2) blur(12px);
-      background: rgba(var(--bg-glass), .75); border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      backdrop-filter: saturate(1.2) blur(12px);
+      background: rgba(255,255,255,.75);
+      border-bottom: 1px solid var(--border);
     }
-    .appbar-inner { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+    .appbar-inner { display: flex; justify-content: space-between; align-items: center; height: 68px; }
     .brand {
-      display: inline-grid; place-items: center; width: 44px; height: 44px; border-radius: 12px; font-weight: 800;
-      color: #fff; letter-spacing:.5px; background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
-      box-shadow: 0 10px 20px hsla(240 70% 50% / .25);
+      width: 44px; height: 44px;
+      display: grid; place-items: center;
+      border-radius: 12px; font-weight: 800; color: #fff;
+      background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
     }
-    .nav { display: flex; gap: clamp(1rem, 2vw, 2.2rem); align-items: center; }
-    .nav a { color: var(--text-2); font-weight: 600; position: relative; padding: .2rem .1rem; }
-    .nav a::after { content:""; position: absolute; left:0; right:0; bottom:-8px; height:2px; background: linear-gradient(90deg,var(--brand-1),var(--brand-2)); transform:scaleX(0); transform-origin:left; transition: transform .25s var(--ease); }
+    .nav { display: flex; gap: 2rem; }
+    .nav a { color: var(--text-2); font-weight: 600; position: relative; }
+    .nav a::after {
+      content:""; position:absolute; left:0; right:0; bottom:-6px;
+      height:2px; background: linear-gradient(90deg,var(--brand-1),var(--brand-2));
+      transform:scaleX(0); transform-origin:left;
+      transition: transform .25s var(--ease);
+    }
     .nav a:hover::after { transform:scaleX(1); }
-    .menu-btn { display:none; background:transparent; border:0; font-size:1.25rem; color:var(--text); }
-
-    /* Theme toggle */
-    .theme-toggle { border: 1px solid var(--border); background: var(--bg-elev); width: 42px; height: 42px; border-radius: 50%; display:grid; place-items:center; }
-
-    /* Mobile drawer */
-    .drawer { display:none; }
 
     /* Hero */
-    .hero {
-      position: relative; padding: clamp(3rem, 7vw, 6rem) 0; overflow: hidden;
-      background: radial-gradient(1200px 600px at 80% -20%, hsl(262 83% 60% / .18), transparent 60%),
-                  radial-gradient(800px 500px at -10% 20%, hsl(193 90% 45% / .15), transparent 60%);
+    .hero { padding: 4rem 0; background: var(--bg-elev); }
+    .hero-grid { display: grid; grid-template-columns: 320px 1fr; gap: 3rem; }
+    .profile { text-align: center; }
+    .avatar-wrap { border-radius: var(--radius-lg); overflow: hidden; }
+    .avatar { width: 100%; height: auto; }
+    .name { font-size: 1.6rem; font-weight: 700; }
+    .role { color: var(--text-2); }
+    .links { margin-top: 1rem; display:flex; justify-content:center; gap:.6rem; }
+    .links a { width: 44px; height: 44px; border-radius: 12px; display:grid; place-items:center; border:1px solid var(--border); background: var(--bg); }
+    .links a:hover { background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color:#fff; }
+
+    .hero-content h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 1rem; }
+    .hero-content p { margin-bottom: 1rem; color: var(--text-2); }
+    .hero-actions { margin-top: 1.5rem; display:flex; gap:1rem; }
+
+    .btn {
+      display:inline-flex; align-items:center; gap:.5rem;
+      padding:.75rem 1.25rem; border-radius: var(--radius-lg);
+      font-weight: 600; background: linear-gradient(135deg, var(--brand-1), var(--brand-2));
+      color: #fff; box-shadow: var(--shadow-sm);
     }
-    .hero-grid { display: grid; grid-template-columns: 320px 1fr; gap: clamp(2rem, 5vw, 4rem); align-items: start; }
+    .btn.ghost { background: transparent; color: var(--text-2); border:1px solid var(--border); }
+    .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 
-    .profile {
-      position: sticky; top: 90px; text-align: center; display: grid; gap: 1rem; align-content: start;
-      background: rgba(var(--bg-glass), .65); border: 1px solid var(--border); border-radius: var(--radius-xl);
-      padding: 1.2rem; box-shadow: var(--shadow-sm);
+    /* Highlight Link */
+    .highlight-link {
+      font-weight: 600;
+      background: linear-gradient(90deg, var(--brand-1), var(--brand-2));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      position: relative;
     }
-    .avatar-wrap { position: relative; border-radius: var(--radius-xl); overflow: hidden; aspect-ratio: 1/1; }
-    .avatar-wrap::before {
-      content:""; position:absolute; inset:-2px; padding:2px; border-radius: inherit;
-      background: linear-gradient(180deg, var(--brand-1), var(--brand-2), var(--brand-3)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor; mask-composite: exclude;
+    .highlight-link::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 100%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--brand-1), var(--brand-2));
+      transform: scaleX(0);
+      transform-origin: left;
+      transition: transform 0.25s var(--ease);
     }
-    .avatar { width: 100%; height: 100%; object-fit: cover; }
-    .name { font-size: clamp(1.4rem, 2.2vw, 1.75rem); font-weight: 800; }
-    .role { color: var(--text-2); font-weight: 600; }
-    .links { display:flex; justify-content:center; gap:.6rem; flex-wrap: wrap; }
-    .links a { width: 44px; height: 44px; display:grid; place-items:center; border-radius: 12px; border:1px solid var(--border); background: var(--bg-elev); color: var(--text-2); transition: transform .2s var(--ease), background .2s var(--ease); }
-    .links a:hover { transform: translateY(-2px); background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); color:#fff; }
-
-    .hero-content h1 { font-weight: 900; line-height: 1.1; font-size: clamp(2rem, 4.5vw, 3.1rem); margin: 0 0 1rem; }
-    .lead { color: var(--text-2); font-size: clamp(1rem, 1.2vw, 1.15rem); margin-bottom: 1rem; }
-    .hero-actions { display:flex; gap:.75rem; flex-wrap: wrap; margin-top: 1rem; }
-
-    /* Sections */
-    section { padding: clamp(3rem, 7vw, 5rem) 0; }
-    .section-head { text-align:center; margin-bottom: clamp(1.5rem, 3vw, 2.5rem); }
-    .section-title { font-size: clamp(1.6rem, 3vw, 2.25rem); font-weight: 900; }
-    .section-sub { color: var(--text-2); max-width: 680px; margin: .75rem auto 0; }
-
-    /* Cards */
-    .grid { display: grid; gap: clamp(1rem, 2vw, 1.5rem); }
-    .grid.skills { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-    .grid.projects { grid-template-columns: repeat(auto-fit, minmax(360px, 1fr)); }
-
-    .card {
-      border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-elev);
-      padding: clamp(1rem, 2.5vw, 1.4rem); box-shadow: var(--shadow-sm); transition: transform .25s var(--ease), box-shadow .25s var(--ease), border-color .25s var(--ease);
-    }
-    .card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); border-color: hsl(230 70% 60% / .6); }
-
-    .skill-head { display:flex; gap:.8rem; align-items:center; margin-bottom:.65rem; }
-    .skill-head i { font-size: 1.35rem; background: linear-gradient(135deg, var(--brand-1), var(--brand-2)); -webkit-background-clip: text; color: transparent; }
-    .chipset { display:flex; gap:.45rem; flex-wrap: wrap; margin-top: .75rem; }
-    .chip { font-family: var(--font-mono); font-size:.85rem; padding: .35rem .6rem; border-radius: 999px; background: var(--chip); border: 1px dashed var(--border); color: var(--text-2); }
-
-    /* Publications */
-    .pub { display:grid; grid-template-columns: 220px 1fr; gap: clamp(1rem,2.5vw,2rem); align-items: start; padding: clamp(1rem,2.5vw,1.4rem); border: 1px solid var(--border); border-radius: var(--radius-lg); background: var(--bg-elev); box-shadow: var(--shadow-sm); }
-    .pub + .pub { margin-top: 1rem; }
-    .thumb { border:1px solid var(--border); border-radius: var(--radius); overflow:hidden; background: linear-gradient(180deg, hsl(220 16% 96%), hsl(220 16% 92%)); }
-    .pub h3 { margin: .25rem 0 .35rem; font-size: clamp(1.05rem, 2.2vw, 1.2rem); font-weight: 800; color: var(--brand-1); }
-    .authors { color: var(--text-2); font-size: .98rem; }
-    .venue { color: var(--text-3); font-weight: 600; margin: .4rem 0 .9rem; }
-    .pub-links { display:flex; gap:.5rem; flex-wrap:wrap; }
-    .pub-links a { padding:.5rem .85rem; border-radius: 10px; border:1px solid var(--border); background: var(--bg); color: var(--text-2); font-weight: 600; }
-    .badge { display:inline-block; padding:.25rem .6rem; border-radius:999px; background: linear-gradient(135deg, var(--warn), hsl(28 94% 54%)); color:#111; font-weight:800; font-size:.8rem; }
-
-    /* Projects */
-    .project h3 { display:flex; align-items:center; gap:.6rem; font-weight: 800; }
-    .project p { color: var(--text-2); }
-
-    /* Footer */
-    footer { background: var(--bg-elev); border-top:1px solid var(--border); padding: 2.2rem 0; text-align:center; color: var(--text-3); }
-
-    /* Reveal on scroll */
-    .reveal { opacity: 0; transform: translateY(14px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
-    .reveal.in { opacity: 1; transform: none; }
-
-    /* Responsive */
-    @media (max-width: 1024px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .profile { position: static; order: 2; }
-      .hero-content { order: 1; }
-    }
-    @media (max-width: 860px) {
-      .nav { display:none; }
-      .menu-btn { display:inline-grid; place-items:center; }
-      .drawer { display:block; position: fixed; inset: 68px 0 auto 0; background: rgba(var(--bg-glass), .95); border-bottom: 1px solid var(--border); transform: translateY(-100%); transition: transform .35s var(--ease); z-index: 30; }
-      .drawer.open { transform: translateY(0); }
-      .drawer .container { display:flex; flex-direction: column; gap: 1rem; padding: 1rem 1.25rem; }
-      .drawer a { padding:.75rem 0; color: var(--text-2); font-weight: 700; }
-      .pub { grid-template-columns: 1fr; }
-      .grid.projects { grid-template-columns: 1fr; }
-    }
-
-    /* Reduced motion */
-    @media (prefers-reduced-motion: reduce) {
-      * { animation: none !important; transition: none !important; }
-    }
+    .highlight-link:hover::after { transform: scaleX(1); }
   </style>
 </head>
 <body>
-  <!-- App Bar -->
+
+  <!-- Header -->
   <header class="appbar">
     <div class="container appbar-inner">
       <a class="brand" href="#">MS</a>
-      <nav class="nav" aria-label="Primary">
+      <nav class="nav">
         <a href="#about">About</a>
         <a href="#skills">Tech Toolbox</a>
         <a href="#publications">Publications</a>
         <a href="#projects">Projects</a>
       </nav>
-      <div style="display:flex; align-items:center; gap:.6rem;">
-        <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme"><i class="fa-solid fa-moon"></i></button>
-        <button class="menu-btn" id="menuBtn" aria-label="Open menu"><i class="fa-solid fa-bars"></i></button>
-      </div>
-    </div>
-    <div class="drawer" id="drawer">
-      <div class="container">
-        <a href="#about" onclick="closeDrawer()">About</a>
-        <a href="#skills" onclick="closeDrawer()">Tech Toolbox</a>
-        <a href="#publications" onclick="closeDrawer()">Publications</a>
-        <a href="#projects" onclick="closeDrawer()">Projects</a>
-      </div>
     </div>
   </header>
 
-<main>
   <!-- Hero -->
-  <section class="hero" id="about">
-    <div class="container hero-grid">
-      <aside class="profile reveal">
-        <div class="avatar-wrap">
-          <img class="avatar" src="assets/img/marjan_imagev2.png" alt="Portrait of Marjan Stoimchev" />
-        </div>
-        <h2 class="name">Marjan Stoimchev</h2>
-        <p class="role">PhD Researcher • Machine Learning Engineer</p>
-        <div class="links" aria-label="Social links">
-          <a href="assets/MsCv.pdf" class="cv" title="Download CV" target="_blank"><i class="fa-solid fa-file-arrow-down"></i></a>
-          <a href="https://github.com/marjanstoimchev" target="_blank" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a>
-          <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en" target="_blank" title="Google Scholar" aria-label="Google Scholar"><i class="fa-solid fa-graduation-cap"></i></a>
-          <a href="https://www.linkedin.com/in/marjan-stoimchev-636657179/" target="_blank" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
-          <a href="mailto:marjanstoimcev@gmail.com" title="Email" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
-        </div>
-      </aside>
-
-      <div class="hero-content reveal">
-        <h1>PhD Researcher in Artificial Intelligence</h1>
-
-        <p>
-          I am a PhD researcher at the 
-          <a href="https://kt.ijs.si/" target="_blank">
-            Department of Knowledge Technologies, Jožef Stefan Institute, Slovenia
-          </a>, where I develop novel, domain-agnostic methods in supervised, semi-supervised, 
-          and self-supervised learning. My aim is to reduce dependence on labeled data 
-          while creating models that are both robust and generalizable across different application areas.
-        </p>
-
-        <p>
-          My research covers diverse domains such as remote sensing, oncology imaging, 
-          and digital pathology, demonstrating the transferability and scalability of 
-          the methods I design. I have extensive experience in building end-to-end 
-          deep learning pipelines, from data preprocessing and augmentation to large-scale 
-          multi-GPU training, optimization, and evaluation.
-        </p>
-
-        <p>
-          Although much of my work is rooted in computer vision, I am highly adaptable 
-          and eager to apply my expertise to new AI challenges, always prioritizing 
-          robustness, scalability, and real-world applicability.
-        </p>
-
-        <div class="hero-actions">
-          <a class="btn" href="#projects"><i class="fa-solid fa-arrow-trend-up"></i> See Projects</a>
-          <a class="btn ghost" href="#publications"><i class="fa-regular fa-file-lines"></i> Publications</a>
-        </div>
-      </div>
-    </div>
-  </section>
-</main>
-
-
-    <!-- Tech Toolbox -->
-    <section id="skills">
-      <div class="container">
-        <header class="section-head">
-          <h2 class="section-title">Tech Toolbox</h2>
-          <p class="section-sub">The stack I use from exploratory research to reliable deployment.</p>
-        </header>
-
-        <div class="grid skills">
-          <div class="card reveal">
-            <div class="skill-head"><i class="fa-solid fa-code"></i><h3>Languages & Libraries</h3></div>
-            <p class="text">Python-centric data & ML workflows for scalable analysis.</p>
-            <div class="chipset">
-              <span class="chip">Python</span><span class="chip">NumPy</span><span class="chip">SciPy</span><span class="chip">Pandas</span><span class="chip">Matplotlib</span><span class="chip">scikit-learn</span><span class="chip">OpenCV</span>
-            </div>
+  <main>
+    <section class="hero" id="about">
+      <div class="container hero-grid">
+        <aside class="profile">
+          <div class="avatar-wrap">
+            <img class="avatar" src="assets/img/marjan_imagev2.png" alt="Portrait of Marjan Stoimchev" />
           </div>
-
-          <div class="card reveal">
-            <div class="skill-head"><i class="fa-solid fa-robot"></i><h3>Deep Learning</h3></div>
-            <p>Designing, training, and optimizing modern architectures.</p>
-            <div class="chipset">
-              <span class="chip">PyTorch</span><span class="chip">Lightning</span><span class="chip">TorchGeo</span><span class="chip">PyG</span><span class="chip">Transformers</span>
-            </div>
+          <h2 class="name">Marjan Stoimchev</h2>
+          <p class="role">PhD Researcher • Machine Learning Engineer</p>
+          <div class="links" aria-label="Social links">
+            <a href="assets/MsCv.pdf" class="cv" title="Download CV" target="_blank"><i class="fa-solid fa-file-arrow-down"></i></a>
+            <a href="https://github.com/marjanstoimchev" target="_blank" title="GitHub" aria-label="GitHub"><i class="fab fa-github"></i></a>
+            <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en" target="_blank" title="Google Scholar" aria-label="Google Scholar"><i class="fa-solid fa-graduation-cap"></i></a>
+            <a href="https://www.linkedin.com/in/marjan-stoimchev-636657179/" target="_blank" title="LinkedIn" aria-label="LinkedIn"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:marjanstoimcev@gmail.com" title="Email" aria-label="Email"><i class="fa-solid fa-envelope"></i></a>
           </div>
+        </aside>
 
-          <div class="card reveal">
-            <div class="skill-head"><i class="fa-solid fa-brain"></i><h3>Core ML/CV</h3></div>
-            <p>Strong focus on data‑efficient learning and structured outputs.</p>
-            <div class="chipset">
-              <span class="chip">Self‑Supervised</span><span class="chip">Semi‑Supervised</span><span class="chip">Detection</span><span class="chip">Segmentation</span><span class="chip">GenAI</span>
-            </div>
+        <div class="hero-content">
+          <h1>PhD Researcher in Artificial Intelligence</h1>
+
+          <p>
+            I am a PhD researcher at the 
+            <a href="https://kt.ijs.si/" target="_blank" class="highlight-link">
+              Department of Knowledge Technologies, Jožef Stefan Institute, Slovenia
+            </a>, where I develop novel, domain-agnostic methods in supervised, semi-supervised, 
+            and self-supervised learning. My aim is to reduce dependence on labeled data 
+            while creating models that are both robust and generalizable across different application areas.
+          </p>
+
+          <p>
+            My research covers diverse domains such as remote sensing, oncology imaging, 
+            and digital pathology, demonstrating the transferability and scalability of 
+            the methods I design. I have extensive experience in building end-to-end 
+            deep learning pipelines, from data preprocessing and augmentation to large-scale 
+            multi-GPU training, optimization, and evaluation.
+          </p>
+
+          <p>
+            Although much of my work is rooted in computer vision, I am highly adaptable 
+            and eager to apply my expertise to new AI challenges, always prioritizing 
+            robustness, scalability, and real-world applicability.
+          </p>
+
+          <div class="hero-actions">
+            <a class="btn" href="#projects"><i class="fa-solid fa-arrow-trend-up"></i> See Projects</a>
+            <a class="btn ghost" href="#publications"><i class="fa-regular fa-file-lines"></i> Publications</a>
           </div>
-
-          <div class="card reveal">
-            <div class="skill-head"><i class="fa-solid fa-satellite-dish"></i><h3>Domains & Tools</h3></div>
-            <p>Applied AI across scientific and industrial settings.</p>
-            <div class="chipset">
-              <span class="chip">Remote Sensing</span><span class="chip">Cancer Research</span><span class="chip">Digital Pathology</span><span class="chip">Git</span><span class="chip">LaTeX</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Publications -->
-    <section id="publications">
-      <div class="container">
-        <header class="section-head">
-          <h2 class="section-title">Selected Publications</h2>
-          <p class="section-sub">For the full list, see <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en" target="_blank" style="text-decoration:underline">Google Scholar</a>.</p>
-        </header>
-
-        <article class="pub reveal">
-          <div class="thumb">
-            <img src="img/pub/ssl_mae.png" alt="SSL‑MAE framework thumbnail" />
-          </div>
-          <div>
-            <h3>SSL‑MAE: Adaptive Semisupervised Learning for Multilabel Classification of Remote Sensing Images</h3>
-            <p class="authors"><strong>M. Stoimchev</strong>, J. Levatić, D. Kocev, S. Džeroski</p>
-            <p class="venue">IEEE JSTARS • 2025</p>
-            <div class="pub-links">
-              <a href="https://ieeexplore.ieee.org/document/10595459" target="_blank"><i class="fa-solid fa-file-lines"></i> Paper</a>
-              <a href="https://github.com/marjanstoimchev/SSL-MAE" target="_blank"><i class="fab fa-github"></i> Code</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="pub reveal">
-          <div class="thumb">
-            <img src="img/pub/ssl_pcts.png" alt="Semi‑supervised PCTs thumbnail" />
-          </div>
-          <div>
-            <h3>Semi‑Supervised Multi‑Label Classification of Land Use/Land Cover in Remote Sensing Images</h3>
-            <p class="authors"><strong>M. Stoimchev</strong>, J. Levatić, D. Kocev, S. Džeroski</p>
-            <p class="venue">IEEE TGRS • 2024</p>
-            <div class="pub-links">
-              <a href="https://ieeexplore.ieee.org/document/10595459" target="_blank"><i class="fa-solid fa-file-lines"></i> Paper</a>
-            </div>
-          </div>
-        </article>
-
-        <article class="pub reveal">
-          <div class="thumb">
-            <img src="img/pub/tpa_cnn.png" alt="Palmprint recognition thumbnail" />
-          </div>
-          <div>
-            <span class="badge">🏆 Prešern Award</span>
-            <h3>Learning to Combine Local and Global Image Information for Contactless Palmprint Recognition</h3>
-            <p class="authors"><strong>M. Stoimchev</strong>, M. Ivanovska, V. Štruc</p>
-            <p class="venue">MDPI Sensors • 2021</p>
-            <div class="pub-links">
-              <a href="https://www.mdpi.com/1424-8220/22/1/73" target="_blank"><i class="fa-solid fa-file-lines"></i> Paper</a>
-              <a href="https://github.com/marjanstoimchev/tpa-cnn" target="_blank"><i class="fab fa-github"></i> Code</a>
-              <a href="https://repozitorij.uni-lj.si/Iskanje.php?type=napredno&lang=slv&stl0=KljucneBesede&niz0=Center+Loss" target="_blank"><i class="fa-solid fa-book-open"></i> Thesis</a>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- Projects -->
-    <section id="projects">
-      <div class="container">
-        <header class="section-head">
-          <h2 class="section-title">Projects</h2>
-          <p class="section-sub">Selected hands‑on work spanning research and deployment.</p>
-        </header>
-
-        <div class="grid projects">
-          <article class="card project reveal">
-            <h3><i class="fa-solid fa-microscope"></i> AI for Cancer Research</h3>
-            <p>Self‑supervised models (DINOv2, MAEs) for multiplex immunofluorescence WSI analysis, including neighborhood detection and retrieval for clinical workflows.</p>
-            <div class="chipset"><span class="chip">Self‑Supervised</span><span class="chip">DINOv2</span><span class="chip">Medical Imaging</span><span class="chip">PyTorch</span></div>
-          </article>
-
-          <article class="card project reveal">
-            <h3><i class="fa-solid fa-atom"></i> Atomic‑Resolution Microscopy</h3>
-            <p>Deep learning correction of drift in STEM images—cutting acquisition time and enabling higher‑throughput microscopy pipelines.</p>
-            <div class="chipset"><span class="chip">Image Reconstruction</span><span class="chip">Materials</span><span class="chip">OpenCV</span><span class="chip">PyTorch</span></div>
-          </article>
-
-          <article class="card project reveal">
-            <h3><i class="fa-solid fa-network-wired"></i> Hierarchical RS with GNNs</h3>
-            <p>Graph neural networks for hierarchical multi‑label land‑use analysis on large‑scale remote sensing datasets.</p>
-            <div class="chipset"><span class="chip">GNNs</span><span class="chip">PyG</span><span class="chip">Remote Sensing</span><span class="chip">H‑MLC</span></div>
-          </article>
-
-          <article class="card project reveal">
-            <h3><i class="fa-solid fa-brain"></i> Brain Tumor Radiogenomics</h3>
-            <p>ML models for predicting tumor characteristics from imaging and omics signals, including robust preprocessing and validation pipelines.</p>
-            <div class="chipset"><span class="chip">Medical Imaging</span><span class="chip">Classification</span><span class="chip">Python</span></div>
-          </article>
         </div>
       </div>
     </section>
   </main>
 
-  <footer>
-    <div class="container">© 2025 • Marjan Stoimchev • Built with care</div>
-  </footer>
-
-  <script>
-    // ===== Mobile menu =====
-    const menuBtn = document.getElementById('menuBtn');
-    const drawer = document.getElementById('drawer');
-    function closeDrawer(){ drawer.classList.remove('open'); }
-    menuBtn?.addEventListener('click', ()=> drawer.classList.toggle('open'));
-
-    // ===== Theme toggle (system / light / dark) =====
-    const root = document.documentElement;
-    const themeToggle = document.getElementById('themeToggle');
-    const THEME_KEY = 'marjan-theme';
-
-    function applyTheme(mode){
-      if(mode === 'system'){ root.setAttribute('data-theme','system'); localStorage.setItem(THEME_KEY,'system');
-        // Match media
-        if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){ root.setAttribute('data-theme','dark'); }
-      } else {
-        root.setAttribute('data-theme', mode);
-        localStorage.setItem(THEME_KEY, mode);
-      }
-      themeToggle.innerHTML = root.getAttribute('data-theme') === 'dark' ? '<i class="fa-solid fa-sun"></i>' : '<i class="fa-solid fa-moon"></i>';
-    }
-
-    const saved = localStorage.getItem(THEME_KEY) || 'system';
-    applyTheme(saved);
-
-    themeToggle?.addEventListener('click', ()=>{
-      const current = root.getAttribute('data-theme');
-      if(current === 'dark') applyTheme('light');
-      else if(current === 'light') applyTheme('dark');
-      else applyTheme('dark'); // system -> dark toggle first
-    });
-
-    // react to system changes when on system mode
-    if(window.matchMedia){
-      window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
-        if((localStorage.getItem(THEME_KEY)||'system')==='system') applyTheme('system');
-      });
-    }
-
-    // ===== Scroll reveal =====
-    const revealEls = document.querySelectorAll('.reveal');
-    const io = new IntersectionObserver((entries)=>{
-      entries.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
-    }, { threshold: .12 });
-    revealEls.forEach(el=> io.observe(el));
-  </script>
 </body>
 </html>
