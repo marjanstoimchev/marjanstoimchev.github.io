@@ -3,7 +3,7 @@ layout: default
 ---
 
 <div class="hero">
-  <img src="/assets/img/marjan_img.jpg" alt="Marjan Stoimchev" class="profile-img">
+  <img src="/assets/img/marjan_image.jpg" alt="Marjan Stoimchev" class="profile-img">
   <div class="hero-text">
     <h1>Marjan Stoimchev</h1>
     <p class="title">PhD Researcher in Machine Learning</p>
