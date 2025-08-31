@@ -2,6 +2,7 @@
 title: "Marjan Stoimchev"
 description: "PhD Researcher in Machine Learning & Computer Vision"
 url: "https://yourusername.github.io"
+logo: /assets/img/marjan_image.jpg
 baseurl: ""
 
 # Personal information
@@ -30,7 +31,7 @@ twitter:
 
 # Navigation
 header_pages:
-  - index.md
+  - about.md
   - publications.md
   - projects.md
   - cv.md
