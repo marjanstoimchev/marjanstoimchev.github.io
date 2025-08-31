@@ -148,9 +148,9 @@
         }
         
         .profile-image {
-            width: 240px;
-            height: 240px;
-            object-fit: cover;
+            max-width: 100%; /* Ensure it doesn't overflow container */
+            height: auto; /* Maintain aspect ratio */
+            object-fit: contain; /* Show entire image, even if it creates empty space */
             margin-bottom: 1.5rem;
         }
 
@@ -542,7 +542,7 @@
                     <div class="profile-section">
                         <img src="assets/img/marjan_imagev2.png" alt="Marjan Stoimchev" class="profile-image">
                         <h2 class="profile-name">Marjan Stoimchev</h2>
-                        <p class="profile-title">Machine Learning & Computer Vision Researcher</p>
+                        <p class="profile-title">PhD Researcher in Deep Learning, Computer Vision | Machine Learning Engineer</p>
                         <a href="assets/MsCv.pdf" class="cv-link" target="_blank">
                             <i class="fas fa-file-arrow-down"></i> Download CV
                         </a>
@@ -607,7 +607,7 @@
                         </div>
                         <p>Deep theoretical and practical knowledge in advanced, data-efficient learning techniques.</p>
                         <div class="skill-tags">
-                            <span class="skill-tag">Self-Supervised</span><span class="skill-tag">Semi-Supervised</span><span class="skill-tag">Image Reconstruction</span><span class="skill-tag">Object Detection</span><span class="skill-tag">Segmentation</span><span class="skill-tag">GenAI</span>
+                            <span class="skill-tag">Self-Supervised</span><span class="skill-tag">Semi-Supervised</span><span class="skill-tag">Image Reconstruction</span><span class="skill-tag">Object Detection</span><span class="tech-tag">Segmentation</span><span class="skill-tag">GenAI</span>
                         </div>
                     </div>
                     <div class="skill-card fade-in">
@@ -617,7 +617,7 @@
                         </div>
                         <p>Applying ML to solve complex problems and using essential tools for reproducible research.</p>
                         <div class="skill-tags">
-                            <span class="skill-tag">Remote Sensing</span><span class="skill-tag">Cancer Research</span><span class="skill-tag">Material Science</span><span class="skill-tag">Git</span><span class="skill-tag">LaTeX</span><span class="skill-tag">Matlab</span>
+                            <span class="tech-tag">Remote Sensing</span><span class="tech-tag">Cancer Research</span><span class="tech-tag">Material Science</span><span class="tech-tag">Git</span><span class="tech-tag">LaTeX</span><span class="tech-tag">Matlab</span>
                         </div>
                     </div>
                 </div>
@@ -636,7 +636,7 @@
                         <img src="img/pub/ssl_mae.png" alt="SSL-MAE Framework">
                     </div>
                     <div class="publication-content">
-                        <h3>SSL-MAE: Adaptive Semisupervised Learning for Multillabel Classification of Remote Sensing Images</h3>
+                        <h3>SSL-MAE: Adaptive Semisupervised Learning for Multilabel Classification of Remote Sensing Images</h3>
                         <p class="publication-authors"><strong>M. Stoimchev</strong>, J. Levatić, D. Kocev, S. Džeroski</p>
                         <p class="publication-venue">IEEE Journal of Selected Topics in Applied Earth Observations and Remote Sensing, 2025</p>
                         <div class="publication-links">
