@@ -1,54 +1,48 @@
-# Site configuration for GitHub Pages
-title: "Marjan Stoimchev"
-description: "PhD Researcher in Machine Learning & Computer Vision"
-url: "https://yourusername.github.io"
-logo: /assets/img/marjan_image.jpg
-baseurl: ""
-
-# Personal information
-author:
-  name: "Marjan Stoimchev"
-  email: "marjanstoimchev@gmail.com"
-  location: "Ljubljana, Slovenia"
-  linkedin: "https://www.linkedin.com/in/marjan-stoimchev-636657179/"
-  scholar: "https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en"
+# Site settings
+title: Marjan Stoimchev
+email: marjanstoimcev@gmail.com
+description: >-
+  PhD Researcher in Machine Learning and Remote Sensing at Jožef Stefan Institute
+baseurl: "" 
+url: "https://marjanstoimchev.github.io"
+twitter_username: 
+github_username: marjanstoimchev
+linkedin_username: marjan-stoimchev-636657179
+google_scholar_id: 05uc3wEAAAAJ
 
 # Build settings
 markdown: kramdown
-highlighter: rouge
-theme: minima
-
-# Plugin settings
+theme: minima # or custom
 plugins:
   - jekyll-feed
-  - jekyll-sitemap
   - jekyll-seo-tag
+  - jekyll-sitemap
 
-# SEO settings
-google_site_verification: # Add your verification code here
-twitter:
-  username: # Add if you have Twitter
-
-# Navigation
-header_pages:
-  - about.md
-  - publications.md
-  - projects.md
-  - cv.md
-
-# Exclude files
-exclude:
-  - README.md
-  - Gemfile
-  - Gemfile.lock
-  - node_modules
-  - vendor
+# Collections
+collections:
+  publications:
+    output: true
+    permalink: /publications/:name/
+  projects:
+    output: true
+    permalink: /projects/:name/
 
 # Defaults
 defaults:
   - scope:
       path: ""
-      type: "pages"
+      type: "publications"
     values:
-      layout: "default"
-      author: "Marjan Stoimchev"
+      layout: "publication"
+  - scope:
+      path: ""
+      type: "projects"
+    values:
+      layout: "project"
+
+# Exclude files
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
