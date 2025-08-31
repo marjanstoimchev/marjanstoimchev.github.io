@@ -1,32 +1,24 @@
 ---
-layout: default
+layout: home
 ---
 
-<div class="hero">
-  <img src="/assets/img/marjan_image.jpg" alt="Marjan Stoimchev" class="profile-img">
-  <div class="hero-text">
+<div style="display: flex; align-items: center; margin-bottom: 2rem;">
+  <div style="flex: 1;">
     <h1>Marjan Stoimchev</h1>
-    <p class="title">PhD Researcher in Machine Learning</p>
-    <p class="affiliation">Jožef Stefan Institute, Ljubljana</p>
-    {% include social-links.html %}
+    <p><strong>PhD Researcher in Machine Learning</strong><br>
+    Jožef Stefan Institute, Ljubljana, Slovenia</p>
+    <p>
+      <a href="mailto:marjanstoimcev@gmail.com">Email</a> | 
+      <a href="https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en">Google Scholar</a> | 
+      <a href="https://www.linkedin.com/in/marjan-stoimchev-636657179/">LinkedIn</a> | 
+      <a href="https://github.com/marjanstoimchev">GitHub</a>
+    </p>
+  </div>
+  <div style="text-align: center;">
+    <img src="/assets/img/marjan_img.jpg" alt="Marjan Stoimchev" style="width: 200px; height: 200px; border-radius: 50%; object-fit: cover; box-shadow: 0 4px 6px rgba(0,0,0,0.1);">
   </div>
 </div>
 
-## Research Interests
-Machine Learning, Deep Learning, Remote Sensing, Computer Vision, Semi-supervised Learning
+## About Me
 
-## Recent Publications
-{% for pub in site.data.publications limit:3 %}
-  {% include publication-card.html publication=pub %}
-{% endfor %}
-
-[View all publications →](/publications/)
-
-## Featured Projects
-{% for project in site.data.projects %}
-  {% if project.featured %}
-    {% include project-card.html project=project %}
-  {% endif %}
-{% endfor %}
-
-[View all projects →](/projects/)
+I am a PhD researcher at the Jožef Stefan Institute working on developing methods for supervised and semi-supervised multi-label remote sensing image analysis through deep learning and classical machine learning approaches.
