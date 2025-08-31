@@ -1,3 +1,7 @@
+# Complete Custom Portfolio Files
+
+## index.html
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -193,3 +197,113 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+```
+
+## main.css
+```css
+body {
+    font-family: 'Lato', sans-serif;
+    line-height: 1.6;
+    background-color: #f8f9fa;
+}
+
+.container-md {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    border: 1px solid #e9ecef !important;
+}
+
+.publication {
+    margin-bottom: 1rem;
+}
+
+.publication img {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 5px;
+    background-color: #fff;
+}
+
+.publication p {
+    margin-bottom: 0.5rem;
+}
+
+.project {
+    border-left: 4px solid #007bff;
+    padding-left: 15px;
+}
+
+h2 {
+    color: #333;
+    font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+h5 {
+    color: #333;
+    font-weight: 500;
+}
+
+a {
+    color: #337ab7;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #23527c;
+    text-decoration: underline;
+}
+
+.rounded-circle {
+    border: 3px solid #e9ecef;
+}
+
+/* Social media icons styling */
+p a img {
+    margin: 0 5px;
+    filter: grayscale(30%);
+    transition: filter 0.3s ease;
+}
+
+p a img:hover {
+    filter: grayscale(0%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .col-md-3, .col-md-7 {
+        text-align: center;
+    }
+    
+    .publication .row {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .publication .col-8 {
+        text-align: center;
+        margin-top: 1rem;
+    }
+}
+```
+
+## Required Images to Create:
+
+You'll need to create/gather these publication thumbnail images (150x150px recommended):
+
+1. `img/pub/ssl_mae_2025.png` - Something related to masked autoencoders or satellite imagery
+2. `img/pub/semi_supervised_2024.png` - Diagram showing semi-supervised learning
+3. `img/pub/deep_network_2023.png` - Neural network architecture or satellite images
+4. `img/pub/epilepsy_detection_2022.png` - EEG signals or brain waves
+5. `img/pub/palmprint_recognition_2021.png` - Palmprint or biometric recognition
+6. `img/pub/pca_epilepsy_2020.png` - PCA visualization or dimensionality reduction
+
+## For Publication Images:
+- Keep them simple and professional
+- Use consistent style/colors
+- 150x150px works well
+- Can be diagrams, sample data, or method illustrations
+- If you don't have specific images, you can use placeholder rectangles with your method names
+
+This gives you Stefan's exact layout structure with your content and proper file paths!
