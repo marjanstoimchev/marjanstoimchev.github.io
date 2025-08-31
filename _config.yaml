@@ -5,14 +5,20 @@ description: >-
   PhD Researcher in Machine Learning and Remote Sensing at Jožef Stefan Institute
 baseurl: "" 
 url: "https://marjanstoimchev.github.io"
-twitter_username: 
+
+# Social links
 github_username: marjanstoimchev
 linkedin_username: marjan-stoimchev-636657179
 google_scholar_id: 05uc3wEAAAAJ
+orcid_id: # Add if you have one
+twitter_username: # Add if you have one
 
 # Build settings
 markdown: kramdown
-theme: minima # or custom
+# Comment out or remove theme to use custom layouts
+# theme: minima
+
+# Plugins
 plugins:
   - jekyll-feed
   - jekyll-seo-tag
@@ -39,6 +45,10 @@ defaults:
       type: "projects"
     values:
       layout: "project"
+  - scope:
+      path: ""
+    values:
+      layout: "default"
 
 # Exclude files
 exclude:
@@ -46,3 +56,33 @@ exclude:
   - Gemfile.lock
   - node_modules
   - vendor
+  - .sass-cache
+  - .jekyll-cache
+  - .jekyll-metadata
+  - README.md
+
+# Additional settings
+kramdown:
+  input: GFM
+  syntax_highlighter: rouge
+  syntax_highlighter_opts:
+    css_class: 'highlight'
+    span:
+      line_numbers: false
+    block:
+      line_numbers: false
+
+# SEO and metadata
+author:
+  name: Marjan Stoimchev
+  email: marjanstoimcev@gmail.com
+
+# Analytics (add your tracking ID when ready)
+google_analytics: # UA-XXXXXXXXX-X or G-XXXXXXXXXX
+
+# Pagination (if needed later)
+paginate: 10
+paginate_path: "/blog/page:num/"
+
+# Timezone
+timezone: Europe/Ljubljana
