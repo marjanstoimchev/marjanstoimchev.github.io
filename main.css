@@ -1,6 +1,14 @@
 body {
     font-family: 'Lato', sans-serif;
     line-height: 1.6;
+    background-color: #f8f9fa;
+}
+
+.container-md {
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    border: 1px solid #e9ecef !important;
 }
 
 .publication {
@@ -11,20 +19,27 @@ body {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 5px;
+    background-color: #fff;
 }
 
 .publication p {
     margin-bottom: 0.5rem;
 }
 
-.container-md {
-    background-color: #ffffff;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+.project {
+    border-left: 4px solid #007bff;
+    padding-left: 15px;
 }
 
 h2 {
     color: #333;
     font-weight: 400;
+    margin-bottom: 1.5rem;
+}
+
+h5 {
+    color: #333;
+    font-weight: 500;
 }
 
 a {
@@ -35,4 +50,36 @@ a {
 a:hover {
     color: #23527c;
     text-decoration: underline;
+}
+
+.rounded-circle {
+    border: 3px solid #e9ecef;
+}
+
+/* Social media icons styling */
+p a img {
+    margin: 0 5px;
+    filter: grayscale(30%);
+    transition: filter 0.3s ease;
+}
+
+p a img:hover {
+    filter: grayscale(0%);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .col-md-3, .col-md-7 {
+        text-align: center;
+    }
+    
+    .publication .row {
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .publication .col-8 {
+        text-align: center;
+        margin-top: 1rem;
+    }
 }
