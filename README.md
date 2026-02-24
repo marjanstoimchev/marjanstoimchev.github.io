@@ -3,7 +3,7 @@
 **PhD Researcher in Machine Learning & Remote Sensing**  
 📍 Jožef Stefan Institute, Ljubljana, Slovenia  
 📧 [marjanstoimcev@gmail.com](mailto:marjanstoimcev@gmail.com)  
-🔗 [LinkedIn](https://www.linkedin.com/in/marjan-stoimchev-636657179/) • [Google Scholar](https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en) • [GitHub](https://github.com/marjanstoimchev)
+🔗 [LinkedIn](https://www.linkedin.com/in/marjan-stoimchev-phd-636657179/) • [Google Scholar](https://scholar.google.com/citations?user=05uc3wEAAAAJ&hl=en) • [GitHub](https://github.com/marjanstoimchev)
 
 ---
 
