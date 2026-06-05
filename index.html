@@ -269,9 +269,13 @@
     @keyframes drift1 { to { transform:translate(-5%,6%) scale(1.08); } }
     @keyframes drift2 { to { transform:translate(6%,-5%) scale(1.1); } }
     @keyframes drift3 { to { transform:translate(-6%,-4%) scale(1.06); } }
-    #latent { position:absolute; inset:0; z-index:0; pointer-events:none;
-      -webkit-mask-image:radial-gradient(135% 125% at 71% 49%, #000 56%, transparent 92%);
-      mask-image:radial-gradient(135% 125% at 71% 49%, #000 56%, transparent 92%); opacity:1; }
+    #latent { position:absolute; inset:0; width:100%; height:100%; z-index:0; pointer-events:none; display:block; --mx:33%; --my:48%;
+      -webkit-mask-image:radial-gradient(140% 125% at var(--mx) var(--my), #000 72%, transparent 96%);
+      mask-image:radial-gradient(140% 125% at var(--mx) var(--my), #000 72%, transparent 96%); opacity:1; }
+    /* readability scrim: darken behind the headline column, fade out toward the
+       centre gap so the constellation still blooms there and over the card area */
+    .hero::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
+      background:linear-gradient(90deg, hsl(222 30% 6% / .62) 0%, hsl(222 30% 6% / .30) 26%, hsl(222 30% 6% / 0) 52%); }
     .hero-grid { position:relative; z-index:2; display:grid; grid-template-columns:1fr 340px; gap:clamp(2rem,4vw,3.5rem); align-items:start; }
 
     .eyebrow { display:inline-flex; align-items:center; gap:.6rem; font-family:var(--font-mono); font-size:.78rem;
@@ -292,9 +296,11 @@
     .text-link:hover i { transform:translateX(3px); }
 
     /* profile card */
-    .profile { background:var(--glass); backdrop-filter:blur(14px) saturate(1.2); -webkit-backdrop-filter:blur(14px) saturate(1.2);
+    .profile { position:relative; isolation:isolate; background:var(--glass); backdrop-filter:blur(14px) saturate(1.2); -webkit-backdrop-filter:blur(14px) saturate(1.2);
       border:1px solid var(--glass-border); border-radius:var(--radius-xl); padding:1.1rem; box-shadow:var(--shadow);
       display:grid; gap:1rem; margin-top:2.4rem; }
+    .profile::before { content:""; position:absolute; z-index:-1; inset:-16% -12%; pointer-events:none;
+      background:radial-gradient(58% 54% at 50% 42%, hsl(248 60% 60% / .16), transparent 72%); }
     .avatar-wrap { position:relative; border-radius:var(--radius-lg); overflow:hidden; aspect-ratio:4/5; }
     .avatar-wrap::after { content:""; position:absolute; inset:0; border-radius:inherit; pointer-events:none;
       box-shadow:inset 0 0 0 1px var(--glass-border); background:linear-gradient(180deg, transparent 55%, hsl(222 40% 4% / .35)); }
@@ -306,7 +312,7 @@
       background:var(--bg-elev); color:var(--text-2); transition:.2s var(--ease); }
     .socials a:hover { color:#fff; background:var(--gradient); border-color:transparent; transform:translateY(-2px); }
     .legend { display:flex; flex-wrap:wrap; gap:.5rem .9rem; justify-content:center; }
-    .legend span { display:inline-flex; align-items:center; gap:.4rem; font-family:var(--font-mono); font-size:.66rem; color:var(--text-3); letter-spacing:.03em; }
+    .legend span { display:inline-flex; align-items:center; gap:.4rem; font-family:var(--font-mono); font-size:.7rem; color:var(--text-3); letter-spacing:.03em; }
     .legend b { width:8px; height:8px; border-radius:50%; display:inline-block; }
 
     /* ---- Impact strip ---- */
@@ -529,8 +535,9 @@
     /* ---- Responsive ---- */
     @media (max-width:920px){
       .hero-grid { grid-template-columns:1fr; }
-      .profile { order:-1; max-width:360px; margin-inline:auto; margin-top:0; }
-      #latent { display:none; }
+      .profile { order:-1; max-width:360px; margin-inline:auto; margin-top:0; background:hsla(222 24% 11% / .82); }
+      /* keep the signature embedding on mobile (centre placement handled in JS) so the legend is never orphaned */
+      #latent { display:block; opacity:.9; }
       .about-grid { grid-template-columns:1fr; }
       .stats { grid-template-columns:repeat(2,1fr); }
     }
@@ -945,7 +952,7 @@ html.pdrawer-lock body{ overflow:hidden; }
               <span><b style="background:hsl(190 92% 55%)"></b> Earth Obs.</span>
               <span><b style="background:hsl(262 84% 66%)"></b> Pathology</span>
               <span><b style="background:hsl(158 72% 52%)"></b> Microscopy</span>
-              <span><b style="background:hsl(38 95% 60%)"></b> Annotation</span>
+              <span><b style="background:hsl(346 82% 64%)"></b> Annotation</span>
               <span><b style="background:hsl(226 80% 62%)"></b> Foundation</span>
             </div>
           </aside>
@@ -1535,154 +1542,383 @@ html.pdrawer-lock body{ overflow:hidden; }
         }, 2600);
       }
 
-      /* ----- Latent-space hero canvas ----- */
+      /* ----- Latent-space hero canvas: "Latent Drift" -----
+         Five research-domain clusters form one connected embedding in the
+         LEFT/CENTER negative space beside the headline. Cross-domain BRIDGES
+         (representation transfer) are the bright hero element; Foundation Models
+         is the hub. Additive bloom, baked vignette, hull tints, one-time settle
+         intro. Container-anchored + hard-clipped so it NEVER touches the
+         .profile card. ~130 nodes / 60fps, reduced-motion -> one static frame. */
       var canvas = document.getElementById('latent');
       if (canvas && canvas.getContext) {
-  var ctx = canvas.getContext('2d');
-  var DPR = 1, W = 0, H = 0, raf = null, running = false, inView = false, t0 = 0;
+        var ctx = canvas.getContext('2d');
+        var DPR = 1, W = 0, H = 0, raf = null, running = false, inView = false, t0 = null;
+        function nowMs(){ return (window.performance && performance.now) ? performance.now() : 0; }
 
-  // Domain clusters -> one connected graph, contained within the visible region
-  // so nothing (and no bridge) is clipped. Big, bright, twinkling points with a
-  // dense intra-cluster mesh + inter-cluster bridges and flowing signal pulses.
-  var CL = [
-    { h: 190, cx: 0.64, cy: 0.30, n: 28 }, // Earth Observation  (cyan)
-    { h: 262, cx: 0.81, cy: 0.46, n: 28 }, // Digital Pathology  (violet)
-    { h: 158, cx: 0.575, cy: 0.60, n: 24 }, // Microscopy        (emerald)
-    { h: 38,  cx: 0.73, cy: 0.70, n: 22 }, // Annotation Systems (amber)
-    { h: 222, cx: 0.66, cy: 0.44, n: 28 }  // Foundation Models  (blue)
-  ];
-  var pts = [], edges = [], pulses = [], glow = [];
-  var seed = 9;
-  function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
-  function gauss(){ var g = (rnd() + rnd() + rnd() - 1.5) / 1.5; return g < -1.6 ? -1.6 : (g > 1.6 ? 1.6 : g); }
-  function leftFade(x){ var f = (x / W - 0.20) / 0.30; return f < 0 ? 0 : (f > 1 ? 1 : f); }
-  function dist2(a, b){ var dx = a.bx - b.bx, dy = a.by - b.by; return dx * dx + dy * dy; }
+        // Layout geometry, recomputed each build()
+        var cLeft = 0, cW = 0;        // container content box (left offset + width) in CSS px
+        var keepoutX = 1e9;           // hard right boundary: nothing paints to the right of this
+        var fadeStart = 1e9;          // edge-fade begins here, reaches 0 at keepoutX
+        var isNarrow = false;         // <=920px single-column band layout
 
-  var SPR = 58;
-  function makeGlow(h){
-    var s = document.createElement('canvas'); s.width = s.height = SPR;
-    var g = s.getContext('2d');
-    var r = g.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
-    r.addColorStop(0, 'hsla(' + h + ' 92% 64% / .9)');
-    r.addColorStop(0.4, 'hsla(' + h + ' 86% 56% / .34)');
-    r.addColorStop(1, 'hsla(' + h + ' 86% 56% / 0)');
-    g.fillStyle = r; g.fillRect(0, 0, SPR, SPR); return s;
-  }
+        // Domain clusters. cx/cy are fractions of the CONTAINER box (desktop) so
+        // they stay locked to the centered content regardless of viewport width.
+        // Foundation Models (index 4) is the HUB. Annotation recolored amber->rose.
+        var CL_WIDE = [
+          { h: 190, cx: 0.30, cy: 0.22, n: 26 }, // Earth Observation  (cyan)
+          { h: 262, cx: 0.46, cy: 0.40, n: 26 }, // Digital Pathology  (violet)
+          { h: 158, cx: 0.18, cy: 0.62, n: 24 }, // Microscopy         (emerald)
+          { h: 346, cx: 0.40, cy: 0.74, n: 22 }, // Annotation Systems (rose-coral)
+          { h: 222, cx: 0.16, cy: 0.34, n: 28 }  // Foundation Models  (blue, HUB)
+        ];
+        // Mobile/narrow: clusters pushed BELOW the stacked profile card so the
+        // graph reads as a band behind the headline, not through the portrait.
+        var CL_NARROW = [
+          { h: 190, cx: 0.20, cy: 0.40, n: 22 },
+          { h: 262, cx: 0.52, cy: 0.30, n: 22 },
+          { h: 158, cx: 0.78, cy: 0.48, n: 20 },
+          { h: 346, cx: 0.64, cy: 0.74, n: 18 },
+          { h: 222, cx: 0.34, cy: 0.66, n: 24 }  // hub
+        ];
+        var CL = CL_WIDE;
 
-  function spawnPulse(){
-    if (!edges.length) return;
-    pulses.push({ e: edges[(Math.random() * edges.length) | 0], t: Math.random(), sp: 0.006 + Math.random() * 0.011 });
-  }
+        // Bridges. Foundation (4) is the hub: it links to the most domains.
+        // The first two are the always-on "hero" bridges that carry steady pulses.
+        var BRIDGES = [
+          { i: 4, j: 1, hero: true },  // Foundation -> Pathology
+          { i: 4, j: 0, hero: true },  // Foundation -> Earth Obs
+          { i: 4, j: 2 },              // Foundation -> Microscopy
+          { i: 4, j: 3 },              // Foundation -> Annotation
+          { i: 0, j: 1 },              // Earth Obs  -> Pathology
+          { i: 1, j: 3 },              // Pathology  -> Annotation
+          { i: 2, j: 3 },              // Microscopy -> Annotation
+          { i: 0, j: 2 }               // Earth Obs  -> Microscopy
+        ];
 
-  function build(){
-    DPR = Math.min(2, window.devicePixelRatio || 1);
-    var rc = canvas.getBoundingClientRect(); W = rc.width; H = rc.height;
-    canvas.width = W * DPR; canvas.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-    seed = 9; pts = []; edges = []; pulses = [];
-    glow = CL.map(function(c){ return makeGlow(c.h); });
-    var byCluster = [];
-    for (var c = 0; c < CL.length; c++){
-      var C = CL[c], sx = W * 0.055, sy = H * 0.09, n = W < 700 ? Math.round(C.n * 0.55) : C.n, arr = [];
-      for (var i = 0; i < n; i++){
-        var x = C.cx * W + gauss() * sx, y = C.cy * H + gauss() * sy;
-        var p = { c: c, h: C.h, x: x, y: y, bx: x, by: y, r: 2.0 + rnd() * 2.2,
-          tw: rnd() * 6.28, tsp: 0.6 + rnd() * 1.1, vx: (rnd() - 0.5) * 0.07, vy: (rnd() - 0.5) * 0.07, flash: 0 };
-        pts.push(p); arr.push(p);
-      }
-      byCluster.push(arr);
-    }
-    for (var a = 0; a < pts.length; a++){
-      var pa = pts[a], cand = [];
-      for (var b = 0; b < pts.length; b++){ if (b === a || pts[b].c !== pa.c) continue; cand.push([dist2(pa, pts[b]), b]); }
-      cand.sort(function(u, v){ return u[0] - v[0]; });
-      for (var k = 0; k < Math.min(4, cand.length); k++){ var bi = cand[k][1]; if (bi > a) edges.push({ a: pa, b: pts[bi], h1: pa.h, h2: pa.h, bridge: false }); }
-    }
-    function addBridge(ci, cj, count){
-      var A = byCluster[ci], B = byCluster[cj], pairs = [];
-      for (var i = 0; i < A.length; i++) for (var j = 0; j < B.length; j++) pairs.push([dist2(A[i], B[j]), A[i], B[j]]);
-      pairs.sort(function(u, v){ return u[0] - v[0]; });
-      for (var k = 0; k < Math.min(count, pairs.length); k++) edges.push({ a: pairs[k][1], b: pairs[k][2], h1: CL[ci].h, h2: CL[cj].h, bridge: true });
-    }
-    var bridges = [[0,4],[4,1],[1,3],[3,2],[2,0],[0,1],[3,4],[4,2]];
-    for (var o = 0; o < bridges.length; o++) addBridge(bridges[o][0], bridges[o][1], 2);
-    for (var s2 = 0; s2 < 18; s2++) spawnPulse();
-  }
+        var pts = [], edges = [], bridgeEdges = [], pulses = [], glow = [];
+        var vignette = null;          // offscreen baked vignette + hull tints
 
-  function frame(ts){
-    if (!t0) t0 = ts || 0;
-    var t = ((ts || 0) - t0) * 0.001;
-    ctx.clearRect(0, 0, W, H);
-    if (!reduce){
-      for (var i = 0; i < pts.length; i++){ var p = pts[i];
-        p.x += p.vx; p.y += p.vy; p.vx += (p.bx - p.x) * 0.0018; p.vy += (p.by - p.y) * 0.0018; p.vx *= 0.99; p.vy *= 0.99;
-        if (p.flash > 0) p.flash -= 0.04;
-        if (Math.random() < 0.0024) p.flash = 1;
-      }
-    }
-    for (var e = 0; e < edges.length; e++){ var ed = edges[e], A = ed.a, B = ed.b;
-      var lf = leftFade((A.x + B.x) / 2); if (lf <= 0) continue;
-      if (ed.bridge){
-        ctx.lineWidth = 1.4;
-        var g = ctx.createLinearGradient(A.x, A.y, B.x, B.y);
-        g.addColorStop(0, 'hsl(' + ed.h1 + ' 85% 66% / ' + (0.26 * lf).toFixed(3) + ')');
-        g.addColorStop(1, 'hsl(' + ed.h2 + ' 85% 66% / ' + (0.26 * lf).toFixed(3) + ')');
-        ctx.strokeStyle = g;
-      } else {
-        ctx.lineWidth = 1.2;
-        ctx.strokeStyle = 'hsl(' + ed.h1 + ' 74% 64% / ' + (0.26 * lf).toFixed(3) + ')';
-      }
-      ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
-    }
-    ctx.lineWidth = 1;
-    for (var k = 0; k < pts.length; k++){ var q = pts[k], f = leftFade(q.x); if (f <= 0) continue;
-      var tw = reduce ? 0.72 : (0.55 + 0.45 * Math.sin(t * q.tsp + q.tw));
-      var fl = q.flash > 0 ? q.flash : 0;
-      var ga = (0.26 + 0.18 * tw + 0.45 * fl) * f;
-      var gsz = SPR * (0.62 + 0.5 * tw + 0.8 * fl) * (0.55 + q.r * 0.22);
-      ctx.globalAlpha = ga < 0 ? 0 : (ga > 1 ? 1 : ga);
-      ctx.drawImage(glow[q.c], q.x - gsz / 2, q.y - gsz / 2, gsz, gsz);
-      ctx.globalAlpha = 1;
-      var ca = (0.7 + 0.3 * tw + 0.42 * fl) * f;
-      ctx.fillStyle = 'hsl(' + q.h + ' 90% ' + (66 + fl * 14) + '% / ' + (ca > 1 ? 1 : ca).toFixed(3) + ')';
-      ctx.beginPath(); ctx.arc(q.x, q.y, q.r * (1 + 0.45 * tw + fl), 0, 6.2832); ctx.fill();
-    }
-    if (!reduce){
-      for (var u = pulses.length - 1; u >= 0; u--){ var pl = pulses[u]; pl.t += pl.sp;
-        if (pl.t >= 1){ pulses.splice(u, 1); spawnPulse(); continue; }
-        var A2 = pl.e.a, B2 = pl.e.b, px = A2.x + (B2.x - A2.x) * pl.t, py = A2.y + (B2.y - A2.y) * pl.t, pf = leftFade(px);
-        if (pf <= 0) continue;
-        var hue = pl.t < 0.5 ? pl.e.h1 : pl.e.h2;
-        ctx.fillStyle = 'hsl(' + hue + ' 95% 72% / ' + (0.22 * pf).toFixed(3) + ')';
-        ctx.beginPath(); ctx.arc(px, py, 6.0, 0, 6.2832); ctx.fill();
-        ctx.fillStyle = 'hsl(' + hue + ' 98% 86% / ' + (0.95 * pf).toFixed(3) + ')';
-        ctx.beginPath(); ctx.arc(px, py, 2.4, 0, 6.2832); ctx.fill();
-      }
-    }
-    if (running && !reduce) raf = requestAnimationFrame(frame);
-  }
+        // Seeded RNG (deterministic layout AND motion)
+        var seed = 9;
+        function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
+        function gauss(){ var g = (rnd() + rnd() + rnd() - 1.5) / 1.5; return g < -1.6 ? -1.6 : (g > 1.6 ? 1.6 : g); }
+        function dist2(a, b){ var dx = a.bx - b.bx, dy = a.by - b.by; return dx * dx + dy * dy; }
+        function clamp01(v){ return v < 0 ? 0 : (v > 1 ? 1 : v); }
+        function easeOutCubic(x){ var u = 1 - x; return 1 - u * u * u; }
 
-  function start(){ if (!running){ running = true; raf = requestAnimationFrame(frame); } }
-  function stop(){ running = false; if (raf) cancelAnimationFrame(raf); }
+        // Right-side keepout: soft alpha fade approaching the card; a hard ctx.clip
+        // at keepoutX (set in frame) is the provable backstop for every element.
+        function edgeFade(x){
+          if (x >= keepoutX) return 0;
+          if (x <= fadeStart) return 1;
+          return (keepoutX - x) / (keepoutX - fadeStart);
+        }
 
-  var rt;
-  window.addEventListener('resize', function(){
-    clearTimeout(rt);
-    rt = setTimeout(function(){ build(); if (reduce || !running) frame(); }, 180);
-  });
+        var SPR = 60;
+        function makeGlow(h){
+          var s = document.createElement('canvas'); s.width = s.height = SPR;
+          var g = s.getContext('2d');
+          var r = g.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
+          // brighter core than before -> reads as a hero visual, not background noise
+          r.addColorStop(0,   'hsla(' + h + ' 95% 66% / 1)');
+          r.addColorStop(0.4, 'hsla(' + h + ' 88% 56% / .42)');
+          r.addColorStop(1,   'hsla(' + h + ' 86% 56% / 0)');
+          g.fillStyle = r; g.fillRect(0, 0, SPR, SPR); return s;
+        }
 
-  function init(){
-    build();
-    if (reduce){ frame(); return; }
-    if ('IntersectionObserver' in window){
-      var hero = document.querySelector('.hero');
-      var io = new IntersectionObserver(function(es){
-        es.forEach(function(en){ inView = en.isIntersecting; if (inView) start(); else stop(); });
-      }, { threshold: 0 });
-      io.observe(hero);
-      document.addEventListener('visibilitychange', function(){ if (document.hidden) stop(); else if (inView) start(); });
-    } else { start(); }
-  }
-  if ('requestIdleCallback' in window) requestIdleCallback(init, { timeout: 1200 }); else setTimeout(init, 400);
+        // Spawn a pulse, biased ~75% toward bridges (cross-domain transfer story).
+        function spawnPulse(forceBridge){
+          if (!edges.length) return;
+          var pool = (forceBridge || (bridgeEdges.length && rnd() < 0.75)) ? bridgeEdges : edges;
+          if (!pool.length) pool = edges;
+          var e = pool[(rnd() * pool.length) | 0];
+          pulses.push({ e: e, t: rnd() * (forceBridge ? 0.0 : 1), sp: 0.006 + rnd() * 0.009, trail: [] });
+        }
+
+        // Bake the vignette + faint per-cluster hull tints once per resize.
+        function makeVignette(){
+          var v = document.createElement('canvas'); v.width = W; v.height = H;
+          if (!W || !H) { vignette = v; return; }
+          var g = v.getContext('2d');
+          // centroid of the constellation in CSS px (rough center of mass, left-of-center)
+          var ccx = cLeft + cW * (isNarrow ? 0.5 : 0.30), ccy = H * (isNarrow ? 0.42 : 0.46);
+          // soft brand-blue medium so the field feels embedded, not floating on flat black
+          var med = g.createRadialGradient(ccx, ccy, 0, ccx, ccy, Math.max(W, H) * 0.6);
+          med.addColorStop(0, 'hsl(248 60% 30% / .10)');
+          med.addColorStop(1, 'hsl(248 60% 30% / 0)');
+          g.fillStyle = med; g.fillRect(0, 0, W, H);
+          // per-cluster hull tints: each domain reads as a distinct region pre-edges
+          g.globalCompositeOperation = 'lighter';
+          for (var c = 0; c < CL.length; c++){
+            var C = CL[c], hx = cLeft + C.cx * cW, hy = C.cy * H, hr = cW * 0.12;
+            var hull = g.createRadialGradient(hx, hy, 0, hx, hy, hr);
+            hull.addColorStop(0, 'hsl(' + C.h + ' 80% 56% / .055)');
+            hull.addColorStop(1, 'hsl(' + C.h + ' 80% 56% / 0)');
+            g.fillStyle = hull; g.fillRect(0, 0, W, H);
+          }
+          g.globalCompositeOperation = 'source-over';
+          vignette = v;
+        }
+
+        function isNarrowNow(){ return (window.innerWidth || document.documentElement.clientWidth) <= 920; }
+
+        function build(){
+          if (!canvas.offsetParent && W) return;          // hidden -> no-op churn
+          DPR = Math.min(isNarrowNow() ? 1.5 : 2, window.devicePixelRatio || 1);
+          var rc = canvas.getBoundingClientRect(); W = rc.width; H = rc.height;
+          if (!W || !H) return;
+          canvas.width = W * DPR; canvas.height = H * DPR; ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+
+          isNarrow = isNarrowNow();
+          CL = isNarrow ? CL_NARROW : CL_WIDE;
+
+          // --- Container-anchored coordinate box (kills wide-viewport drift) ---
+          var maxC = 1180, pad = Math.max(18, Math.min(30, W * 0.04));
+          var contentW = Math.min(W, maxC) - pad * 2;
+          cLeft = (W - Math.min(W, maxC)) / 2 + pad;
+          cW = contentW;
+
+          // --- Numeric keepout measured from the REAL card (belt + suspenders) ---
+          if (isNarrow) {
+            keepoutX = W + 1; fadeStart = W;             // full-width band, no card beside it
+          } else {
+            var card = document.querySelector('.profile');
+            var measured = W * 0.60;                      // fallback if card not laid out yet
+            if (card) {
+              var cr = card.getBoundingClientRect();
+              if (cr.width) measured = (cr.left - rc.left) - 40;  // 40px breathing gutter
+            }
+            keepoutX = Math.min(W * 0.62, Math.max(W * 0.50, measured));
+            fadeStart = keepoutX - W * 0.06;
+          }
+
+          // Track the CSS mask centre to the container-anchored centroid (exact at
+          // every width, incl. ultrawide). One mask declaration, JS-driven centre.
+          var mx = ((cLeft + cW * (isNarrow ? 0.5 : 0.30)) / W) * 100;
+          canvas.style.setProperty('--mx', mx.toFixed(1) + '%');
+          canvas.style.setProperty('--my', isNarrow ? '40%' : '48%');
+
+          seed = 9; pts = []; edges = []; bridgeEdges = []; pulses = [];
+          glow = CL.map(function(c){ return makeGlow(c.h); });
+
+          var byCluster = [];
+          for (var c = 0; c < CL.length; c++){
+            var C = CL[c];
+            var sx = cW * (isNarrow ? 0.050 : 0.042), sy = H * 0.075;
+            var n = W < 700 ? Math.round(C.n * 0.6) : C.n, arr = [];
+            var bx0 = cLeft + C.cx * cW, by0 = C.cy * H;
+            for (var i = 0; i < n; i++){
+              var bx = bx0 + gauss() * sx, by = by0 + gauss() * sy;
+              // depth bucket: ~35% far / 40% mid / 25% near -> parallax-friendly layering
+              var rb = rnd(), depth = rb < 0.35 ? 0 : (rb < 0.75 ? 1 : 2);
+              var rad = depth === 0 ? (1.3 + rnd() * 0.6) : depth === 1 ? (2.0 + rnd() * 0.8) : (2.8 + rnd() * 1.0);
+              var p = { c: c, h: C.h, depth: depth, x: bx, y: by, bx: bx, by: by, r: rad,
+                tw: rnd() * 6.28, tsp: 0.5 + rnd() * 1.0,
+                vx: (rnd() - 0.5) * 0.06, vy: (rnd() - 0.5) * 0.06, flash: 0,
+                // settle intro: start near the constellation centroid
+                ox: cLeft + cW * (isNarrow ? 0.5 : 0.30), oy: H * 0.48 };
+              pts.push(p); arr.push(p);
+            }
+            byCluster.push(arr);
+          }
+
+          // intra-cluster kNN edges
+          for (var a = 0; a < pts.length; a++){
+            var pa = pts[a], cand = [];
+            for (var b = 0; b < pts.length; b++){ if (b === a || pts[b].c !== pa.c) continue; cand.push([dist2(pa, pts[b]), b]); }
+            cand.sort(function(u, v){ return u[0] - v[0]; });
+            for (var k = 0; k < Math.min(4, cand.length); k++){ var bi = cand[k][1]; if (bi > a) edges.push({ a: pa, b: pts[bi], h1: pa.h, h2: pa.h, bridge: false }); }
+          }
+
+          // curated inter-cluster bridges (nearest-pair, kept small)
+          function addBridge(ci, cj, count, hero){
+            var A = byCluster[ci], B = byCluster[cj], best = [];
+            for (var i = 0; i < A.length; i++) for (var j = 0; j < B.length; j++){
+              var d = dist2(A[i], B[j]);
+              if (best.length < count){ best.push([d, A[i], B[j]]); best.sort(function(u, v){ return u[0] - v[0]; }); }
+              else if (d < best[best.length - 1][0]){ best[best.length - 1] = [d, A[i], B[j]]; best.sort(function(u, v){ return u[0] - v[0]; }); }
+            }
+            for (var k = 0; k < best.length; k++){
+              var ed = { a: best[k][1], b: best[k][2], h1: CL[ci].h, h2: CL[cj].h, bridge: true, hero: !!hero };
+              edges.push(ed); bridgeEdges.push(ed);
+            }
+          }
+          for (var o = 0; o < BRIDGES.length; o++) addBridge(BRIDGES[o].i, BRIDGES[o].j, 2, BRIDGES[o].hero);
+
+          makeVignette();
+
+          // seed pulses (deterministic). Fewer on mobile for battery.
+          var nPulse = isNarrow ? 8 : 16;
+          for (var s2 = 0; s2 < nPulse; s2++) spawnPulse();
+        }
+
+        // --- Intro "settle": fires once, on first view ---
+        var introStart = null, introDone = false, hasIntro = false;
+        function beginIntro(){ if (!hasIntro && !reduce){ hasIntro = true; introStart = null; introDone = false; } }
+        // continuous hero-bridge pulse scheduler
+        var heroAccum = 0;
+
+        function frame(ts){
+          if (t0 === null) t0 = (ts == null ? nowMs() : ts);
+          var now = (ts == null ? nowMs() : ts) - t0, t = now * 0.001;
+
+          // intro progress (0..1). If reduced-motion or no intro requested -> fully settled.
+          var ip = 1;
+          if (!reduce && hasIntro){
+            if (introStart === null) introStart = now;
+            ip = clamp01((now - introStart) / 1150);
+            if (ip >= 1) introDone = true;
+          }
+          var eip = easeOutCubic(ip);
+          // edges fade in slightly after points settle (0.45..1.0 of intro)
+          var edgeIn = reduce ? 1 : clamp01((ip - 0.45) / 0.55);
+
+          ctx.clearRect(0, 0, W, H);
+          if (vignette) ctx.drawImage(vignette, 0, 0, W, H);
+
+          // HARD KEEPOUT: clip every graph element to the left of the card. Makes the
+          // intersection provably impossible for edges, glow halos, cores AND pulses.
+          ctx.save();
+          ctx.beginPath(); ctx.rect(0, 0, keepoutX, H); ctx.clip();
+
+          // physics (skip under reduced-motion)
+          if (!reduce && introDone){
+            for (var i = 0; i < pts.length; i++){ var p = pts[i];
+              p.x += p.vx; p.y += p.vy;
+              p.vx += (p.bx - p.x) * 0.0018; p.vy += (p.by - p.y) * 0.0018;
+              p.vx *= 0.99; p.vy *= 0.99;
+              if (p.flash > 0) p.flash -= 0.04;
+              if (rnd() < 0.0024) p.flash = 1;
+            }
+          } else if (!reduce){
+            // during intro, lerp from shared origin to base position
+            for (var i2 = 0; i2 < pts.length; i2++){ var q0 = pts[i2];
+              q0.x = q0.ox + (q0.bx - q0.ox) * eip;
+              q0.y = q0.oy + (q0.by - q0.oy) * eip;
+            }
+          } else {
+            // reduced-motion: settled positions, no motion
+            for (var i3 = 0; i3 < pts.length; i3++){ pts[i3].x = pts[i3].bx; pts[i3].y = pts[i3].by; }
+          }
+
+          // ---- EDGE + GLOW PASS (additive bloom) ----
+          ctx.globalCompositeOperation = 'lighter';
+
+          // edges. ~16 short bridge gradients/frame is negligible at 60fps.
+          for (var e = 0; e < edges.length; e++){ var ed = edges[e], A = ed.a, B = ed.b;
+            var mxe = (A.x + B.x) * 0.5, lf = edgeFade(mxe) * edgeIn; if (lf <= 0.01) continue;
+            if (ed.bridge){
+              ctx.lineWidth = 1.9;
+              var bg = ctx.createLinearGradient(A.x, A.y, B.x, B.y);
+              bg.addColorStop(0, 'hsl(' + ed.h1 + ' 88% 68%)');
+              bg.addColorStop(1, 'hsl(' + ed.h2 + ' 88% 68%)');
+              ctx.strokeStyle = bg;
+              ctx.globalAlpha = (ed.hero ? 0.60 : 0.52) * lf;
+            } else {
+              ctx.lineWidth = 1.0;
+              ctx.strokeStyle = 'hsl(' + ed.h1 + ' 74% 64%)';
+              ctx.globalAlpha = 0.26 * lf;
+            }
+            ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
+          }
+          ctx.globalAlpha = 1;
+
+          // node glows (still additive). Drawn in cluster order; order-independent
+          // under 'lighter' so layering does not matter visually.
+          for (var k = 0; k < pts.length; k++){ var q = pts[k], f = edgeFade(q.x); if (f <= 0.01) continue;
+            var tw = reduce ? 0.7 : (0.55 + 0.45 * Math.sin(t * q.tsp + q.tw));
+            var fl = q.flash > 0 ? q.flash : 0;
+            var depthA = q.depth === 0 ? 0.55 : q.depth === 1 ? 0.78 : 1.0;
+            var ga = (0.24 + 0.16 * tw + 0.42 * fl) * f * depthA * (0.4 + 0.6 * edgeIn);
+            var gsz = SPR * (0.6 + 0.5 * tw + 0.8 * fl) * (0.5 + q.r * 0.22);
+            ctx.globalAlpha = clamp01(ga);
+            ctx.drawImage(glow[q.c], q.x - gsz / 2, q.y - gsz / 2, gsz, gsz);
+          }
+          ctx.globalAlpha = 1;
+          ctx.globalCompositeOperation = 'source-over';
+
+          // ---- NODE CORES (crisp, source-over so they never blow out) ----
+          for (var n2 = 0; n2 < pts.length; n2++){ var qc = pts[n2], fc = edgeFade(qc.x); if (fc <= 0.01) continue;
+            var twc = reduce ? 0.7 : (0.55 + 0.45 * Math.sin(t * qc.tsp + qc.tw));
+            var flc = qc.flash > 0 ? qc.flash : 0;
+            var ca = (0.72 + 0.22 * twc + 0.4 * flc) * fc * (0.5 + 0.5 * edgeIn);
+            ctx.fillStyle = 'hsl(' + qc.h + ' 92% ' + (68 + flc * 14) + '% / ' + clamp01(ca).toFixed(3) + ')';
+            ctx.beginPath(); ctx.arc(qc.x, qc.y, qc.r * (1 + 0.4 * twc + flc), 0, 6.2832); ctx.fill();
+          }
+
+          // ---- PULSES (comet trail; additive; bridges = the hero motion event) ----
+          if (!reduce && edgeIn >= 1){
+            // steady pulses on BOTH hero bridges (Foundation -> domains): roll each
+            // hero edge independently so both streams stay alive.
+            heroAccum += 16;
+            if (heroAccum > 900){ heroAccum = 0;
+              for (var hb = 0; hb < bridgeEdges.length; hb++) if (bridgeEdges[hb].hero && rnd() < 0.4){ pulses.push({ e: bridgeEdges[hb], t: 0, sp: 0.007 + rnd() * 0.006, trail: [] }); }
+            }
+            ctx.globalCompositeOperation = 'lighter';
+            for (var u = pulses.length - 1; u >= 0; u--){ var pl = pulses[u]; pl.t += pl.sp;
+              if (pl.t >= 1){ pulses.splice(u, 1); spawnPulse(); continue; }
+              var A2 = pl.e.a, B2 = pl.e.b;
+              var px = A2.x + (B2.x - A2.x) * pl.t, py = A2.y + (B2.y - A2.y) * pl.t;
+              var pf = edgeFade(px); if (pf <= 0.01) continue;
+              var hue = pl.t < 0.5 ? pl.e.h1 : pl.e.h2;
+              // comet trail: 3 fading prior positions -> directional flow, not a blink
+              pl.trail.unshift({ x: px, y: py }); if (pl.trail.length > 3) pl.trail.pop();
+              for (var tr = pl.trail.length - 1; tr >= 0; tr--){
+                var ptr = pl.trail[tr], ta = (1 - tr / 4) * pf;
+                ctx.fillStyle = 'hsl(' + hue + ' 95% 72% / ' + (0.28 * ta).toFixed(3) + ')';
+                ctx.beginPath(); ctx.arc(ptr.x, ptr.y, 5.0 * (1 - tr * 0.18), 0, 6.2832); ctx.fill();
+              }
+              ctx.fillStyle = 'hsl(' + hue + ' 98% 88% / ' + (0.95 * pf).toFixed(3) + ')';
+              ctx.beginPath(); ctx.arc(px, py, 2.4, 0, 6.2832); ctx.fill();
+            }
+            ctx.globalAlpha = 1;
+            ctx.globalCompositeOperation = 'source-over';
+          }
+
+          ctx.restore();   // end hard-keepout clip
+
+          if (running && !reduce) raf = requestAnimationFrame(frame);
+        }
+
+        // Optional progressive enhancement: legend-swatch hover highlight.
+        // Assign (not max) so passing null actively clears the highlight.
+        window.__latentHighlight = function(idx){
+          for (var i = 0; i < pts.length; i++) pts[i].flash = (idx == null) ? 0 : (pts[i].c === idx ? 0.85 : 0);
+          if (reduce || !running) frame(nowMs());
+        };
+
+        function start(){ if (!running){ running = true; raf = requestAnimationFrame(frame); } }
+        function stop(){ running = false; if (raf) cancelAnimationFrame(raf); }
+
+        var rt;
+        window.addEventListener('resize', function(){
+          clearTimeout(rt);
+          rt = setTimeout(function(){
+            if (!canvas.offsetParent) return;     // hidden -> no-op (kills W=0 churn)
+            build();
+            frame(nowMs());                       // always paint one frame (no blank window)
+          }, 180);
+        }, { passive: true });
+
+        function init(){
+          build();
+          if (reduce){ frame(nowMs()); return; }  // reduced-motion: one settled frame, no loop
+          beginIntro();                           // arm intro BEFORE first paint (no settled->collapse pop)
+          frame(nowMs());                         // first paint = collapsed origin; intro animates out
+          if ('IntersectionObserver' in window){
+            var hero = document.querySelector('.hero');
+            var io = new IntersectionObserver(function(es){
+              es.forEach(function(en){
+                inView = en.isIntersecting;
+                if (inView) start();
+                else stop();
+              });
+            }, { threshold: 0, rootMargin: '120px 0px' });
+            io.observe(hero);
+            document.addEventListener('visibilitychange', function(){ if (document.hidden) stop(); else if (inView) start(); });
+          } else { start(); }
+        }
+        if ('requestIdleCallback' in window) requestIdleCallback(init, { timeout: 900 }); else setTimeout(init, 300);
       }
     })();
   </script>
