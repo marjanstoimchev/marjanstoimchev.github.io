@@ -1686,28 +1686,29 @@ html.pdrawer-lock body{ overflow:hidden; }
           cW = contentW;
 
           // --- Placement region ---
-          // Desktop: a 2D area filling the LEFT ~44% of the hero (clusters spread
-          // in x AND y -> fills the space, short links, no stretchy vertical chain).
-          // Mobile: the full container width, centred behind the headline.
+          // Desktop: fill the empty LEFT MARGIN beside the centred text column.
+          // The region's right edge is pinned to the text's left edge (cLeft) minus
+          // a gutter, so the constellation NEVER crosses into the copy. Its height is
+          // aspect-limited to pW so a narrow margin gives a compact cloud (not a tall
+          // stretchy rail). Mobile: full container width, centred behind the headline.
           if (isNarrow) {
             pL = cLeft; pW = cW; rT = 0; rH = H; cenX = cLeft + cW * 0.5; cenY = H * 0.42;
           } else {
-            pL = W * 0.02; pW = W * 0.48; rT = H * 0.05; rH = H * 0.90;
-            cenX = pL + pW * 0.42; cenY = rT + rH * 0.46;
+            var gutter = Math.max(28, W * 0.02);
+            pL = W * 0.012;
+            pW = Math.max(40, (cLeft - gutter) - pL);
+            rH = Math.min(H * 0.90, pW * 2.0);
+            rT = Math.max(H * 0.05, (H - rH) / 2);
+            cenX = pL + pW * 0.46; cenY = rT + rH * 0.46;
           }
 
-          // --- Numeric keepout measured from the REAL card (belt + suspenders) ---
+          // --- Hard keepout: clip everything to the left of the text column on
+          // desktop (so not even a glow halo bleeds onto the copy); none on mobile. ---
           if (isNarrow) {
-            keepoutX = W + 1; fadeStart = W;             // full-width band, no card beside it
+            keepoutX = W + 1; fadeStart = W;
           } else {
-            var card = document.querySelector('.profile');
-            var measured = W * 0.60;                      // fallback if card not laid out yet
-            if (card) {
-              var cr = card.getBoundingClientRect();
-              if (cr.width) measured = (cr.left - rc.left) - 40;  // 40px breathing gutter
-            }
-            keepoutX = Math.min(W * 0.62, Math.max(W * 0.50, measured));
-            fadeStart = keepoutX - W * 0.06;
+            keepoutX = cLeft - 6;
+            fadeStart = keepoutX - W * 0.05;
           }
 
           // Track the CSS mask centre to the constellation centroid (exact at every
@@ -1716,6 +1717,9 @@ html.pdrawer-lock body{ overflow:hidden; }
           canvas.style.setProperty('--my', ((cenY / H) * 100).toFixed(1) + '%');
 
           seed = 9; pts = []; edges = []; bridgeEdges = []; pulses = [];
+          // Not enough left margin beside the text column (narrow desktop): render
+          // nothing rather than a cramped speck. Mobile uses its own centred band.
+          if (!isNarrow && pW < 140) { glow = []; vignette = null; return; }
           glow = CL.map(function(c){ return makeGlow(c.h); });
 
           var byCluster = [];
