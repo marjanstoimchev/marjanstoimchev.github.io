@@ -7,7 +7,7 @@
  */
 'use strict';
 
-const CACHE_VERSION = 'v5';
+const CACHE_VERSION = 'v6';
 const CACHE_NAME = 'marjan-portfolio-' + CACHE_VERSION;
 
 // Same-origin app shell to precache. Keep this minimal and same-origin only.
