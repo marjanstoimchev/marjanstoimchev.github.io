@@ -7,7 +7,7 @@
  */
 'use strict';
 
-const CACHE_VERSION = 'v1';
+const CACHE_VERSION = 'v3';
 const CACHE_NAME = 'marjan-portfolio-' + CACHE_VERSION;
 
 // Same-origin app shell to precache. Keep this minimal and same-origin only.
@@ -85,7 +85,7 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       (async () => {
         try {
-          const networkResponse = await fetch(request);
+          const networkResponse = await fetch(request, { cache: 'no-cache' });
           // Refresh BOTH canonical home keys so the offline fallback never serves stale.
           if (networkResponse && networkResponse.ok) {
             const copy = networkResponse.clone();

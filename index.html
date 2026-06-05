@@ -1956,6 +1956,10 @@ html.pdrawer-lock body{ overflow:hidden; }
   // Guarded service worker registration: feature-detected, runs after load,
   // and silently no-ops if registration fails (safe for static hosting).
   if ('serviceWorker' in navigator) {
+    var __swReloading = false;
+    navigator.serviceWorker.addEventListener('controllerchange', function () {
+      if (__swReloading) return; __swReloading = true; window.location.reload();
+    });
     window.addEventListener('load', function () {
       navigator.serviceWorker.register('/sw.js').catch(function () {
         /* registration failed — ignore, site still works without the SW */
