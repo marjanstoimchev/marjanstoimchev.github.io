@@ -275,7 +275,7 @@
     /* readability scrim: darken behind the headline column, fade out toward the
        centre gap so the constellation still blooms there and over the card area */
     .hero::after { content:""; position:absolute; inset:0; z-index:1; pointer-events:none;
-      background:linear-gradient(90deg, hsl(222 30% 6% / .30) 0%, hsl(222 30% 6% / .12) 20%, hsl(222 30% 6% / 0) 40%); }
+      background:linear-gradient(90deg, hsl(222 30% 6% / .34) 0%, hsl(222 30% 6% / .16) 22%, hsl(222 30% 6% / .04) 42%, hsl(222 30% 6% / 0) 56%); }
     .hero-grid { position:relative; z-index:2; display:grid; grid-template-columns:1fr 340px; gap:clamp(2rem,4vw,3.5rem); align-items:start; }
 
     .eyebrow { display:inline-flex; align-items:center; gap:.6rem; font-family:var(--font-mono); font-size:.78rem;
@@ -1557,22 +1557,24 @@ html.pdrawer-lock body{ overflow:hidden; }
 
         // Layout geometry, recomputed each build()
         var cLeft = 0, cW = 0;        // container content box (left offset + width) in CSS px
-        var pL = 0, pW = 0;           // placement band (left offset + width) the clusters live in
+        var pL = 0, pW = 0;           // placement region: left offset + width the clusters live in
+        var rT = 0, rH = 0;           // placement region: top offset + height
         var cenX = 0, cenY = 0;       // constellation centroid (mask / vignette / intro origin)
         var keepoutX = 1e9;           // hard right boundary: nothing paints to the right of this
         var fadeStart = 1e9;          // edge-fade begins here, reaches 0 at keepoutX
         var isNarrow = false;         // <=920px single-column band layout
 
-        // Domain clusters. On desktop cx/cy are fractions of a NARROW left-edge
-        // band (pL..pL+pW) so the embedding reads as a vertical rail hugging the
-        // left edge with the text to its right. Foundation Models (4) is the HUB;
-        // Annotation recolored amber->rose. Clusters are stacked top-to-bottom.
+        // Domain clusters. On desktop cx/cy are fractions of a 2D region filling
+        // the LEFT area of the hero (pL..pL+pW  x  rT..rT+rH), spread in two
+        // dimensions so the embedding fills the space with short, dense links
+        // instead of a stretched vertical chain. Foundation Models (4) is the HUB;
+        // Annotation recolored amber->rose.
         var CL_WIDE = [
-          { h: 190, cx: 0.58, cy: 0.13, n: 24 }, // Earth Observation  (cyan)   - top
-          { h: 262, cx: 0.64, cy: 0.50, n: 24 }, // Digital Pathology  (violet) - mid
-          { h: 158, cx: 0.30, cy: 0.69, n: 22 }, // Microscopy         (emerald)
-          { h: 346, cx: 0.55, cy: 0.88, n: 20 }, // Annotation Systems (rose)    - bottom
-          { h: 222, cx: 0.34, cy: 0.31, n: 26 }  // Foundation Models  (blue, HUB)
+          { h: 190, cx: 0.32, cy: 0.10, n: 34 }, // Earth Observation  (cyan)   - top
+          { h: 262, cx: 0.72, cy: 0.30, n: 30 }, // Digital Pathology  (violet) - upper-right
+          { h: 158, cx: 0.42, cy: 0.90, n: 30 }, // Microscopy         (emerald)- bottom
+          { h: 346, cx: 0.64, cy: 0.70, n: 30 }, // Annotation Systems (rose)   - lower-right
+          { h: 222, cx: 0.20, cy: 0.52, n: 36 }  // Foundation Models  (blue, HUB) - mid-left
         ];
         // Mobile/narrow: clusters pushed BELOW the stacked profile card so the
         // graph reads as a band behind the headline, not through the portrait.
@@ -1647,7 +1649,7 @@ html.pdrawer-lock body{ overflow:hidden; }
           var ccx = cenX, ccy = cenY;
           // soft brand-blue medium so the field feels embedded, not floating on flat
           // black; kept contained around the rail on desktop so it doesn't wash the centre
-          var medR = isNarrow ? Math.max(W, H) * 0.6 : pW * 2.6;
+          var medR = isNarrow ? Math.max(W, H) * 0.6 : pW * 0.85;
           var med = g.createRadialGradient(ccx, ccy, 0, ccx, ccy, medR);
           med.addColorStop(0, 'hsl(248 60% 30% / .10)');
           med.addColorStop(1, 'hsl(248 60% 30% / 0)');
@@ -1655,7 +1657,7 @@ html.pdrawer-lock body{ overflow:hidden; }
           // per-cluster hull tints: each domain reads as a distinct region pre-edges
           g.globalCompositeOperation = 'lighter';
           for (var c = 0; c < CL.length; c++){
-            var C = CL[c], hx = pL + C.cx * pW, hy = C.cy * H, hr = isNarrow ? cW * 0.12 : pW * 0.55;
+            var C = CL[c], hx = pL + C.cx * pW, hy = (isNarrow ? 0 : rT) + C.cy * (isNarrow ? H : rH), hr = isNarrow ? cW * 0.12 : pW * 0.2;
             var hull = g.createRadialGradient(hx, hy, 0, hx, hy, hr);
             hull.addColorStop(0, 'hsl(' + C.h + ' 80% 56% / .055)');
             hull.addColorStop(1, 'hsl(' + C.h + ' 80% 56% / 0)');
@@ -1683,14 +1685,15 @@ html.pdrawer-lock body{ overflow:hidden; }
           cLeft = (W - Math.min(W, maxC)) / 2 + pad;
           cW = contentW;
 
-          // --- Placement band ---
-          // Desktop: a NARROW vertical rail hugging the left edge (text sits to its
-          // right). Mobile: the full container width, centred behind the headline.
+          // --- Placement region ---
+          // Desktop: a 2D area filling the LEFT ~44% of the hero (clusters spread
+          // in x AND y -> fills the space, short links, no stretchy vertical chain).
+          // Mobile: the full container width, centred behind the headline.
           if (isNarrow) {
-            pL = cLeft; pW = cW; cenX = cLeft + cW * 0.5; cenY = H * 0.42;
+            pL = cLeft; pW = cW; rT = 0; rH = H; cenX = cLeft + cW * 0.5; cenY = H * 0.42;
           } else {
-            pW = Math.min(W * 0.16, 260); pL = W * 0.012;
-            cenX = pL + pW * 0.5; cenY = H * 0.5;
+            pL = W * 0.02; pW = W * 0.48; rT = H * 0.05; rH = H * 0.90;
+            cenX = pL + pW * 0.42; cenY = rT + rH * 0.46;
           }
 
           // --- Numeric keepout measured from the REAL card (belt + suspenders) ---
@@ -1718,9 +1721,9 @@ html.pdrawer-lock body{ overflow:hidden; }
           var byCluster = [];
           for (var c = 0; c < CL.length; c++){
             var C = CL[c];
-            var sx = isNarrow ? cW * 0.050 : pW * 0.15, sy = H * (isNarrow ? 0.075 : 0.05);
+            var sx = isNarrow ? cW * 0.050 : pW * 0.10, sy = isNarrow ? H * 0.075 : rH * 0.09;
             var n = W < 700 ? Math.round(C.n * 0.6) : C.n, arr = [];
-            var bx0 = pL + C.cx * pW, by0 = C.cy * H;
+            var bx0 = pL + C.cx * pW, by0 = rT + C.cy * rH;
             for (var i = 0; i < n; i++){
               var bx = bx0 + gauss() * sx, by = by0 + gauss() * sy;
               // depth bucket: ~35% far / 40% mid / 25% near -> parallax-friendly layering
@@ -1843,7 +1846,7 @@ html.pdrawer-lock body{ overflow:hidden; }
             var tw = reduce ? 0.7 : (0.55 + 0.45 * Math.sin(t * q.tsp + q.tw));
             var fl = q.flash > 0 ? q.flash : 0;
             var depthA = q.depth === 0 ? 0.55 : q.depth === 1 ? 0.78 : 1.0;
-            var ga = (0.30 + 0.18 * tw + 0.42 * fl) * f * depthA * (0.4 + 0.6 * edgeIn);
+            var ga = (0.33 + 0.18 * tw + 0.42 * fl) * f * depthA * (0.4 + 0.6 * edgeIn);
             var gsz = SPR * (0.6 + 0.5 * tw + 0.8 * fl) * (0.5 + q.r * 0.22);
             ctx.globalAlpha = clamp01(ga);
             ctx.drawImage(glow[q.c], q.x - gsz / 2, q.y - gsz / 2, gsz, gsz);
