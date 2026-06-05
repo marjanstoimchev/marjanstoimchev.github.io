@@ -271,7 +271,7 @@
     @keyframes drift3 { to { transform:translate(-6%,-4%) scale(1.06); } }
     #latent { position:absolute; inset:0; z-index:0; pointer-events:none;
       -webkit-mask-image:radial-gradient(120% 90% at 78% 35%, #000 35%, transparent 78%);
-      mask-image:radial-gradient(120% 90% at 78% 35%, #000 35%, transparent 78%); opacity:.92; }
+      mask-image:radial-gradient(120% 90% at 78% 35%, #000 35%, transparent 78%); opacity:1; }
     .hero-grid { position:relative; z-index:2; display:grid; grid-template-columns:1fr 340px; gap:clamp(2rem,4vw,3.5rem); align-items:start; }
 
     .eyebrow { display:inline-flex; align-items:center; gap:.6rem; font-family:var(--font-mono); font-size:.78rem;
@@ -1541,37 +1541,37 @@ html.pdrawer-lock body{ overflow:hidden; }
   var ctx = canvas.getContext('2d');
   var DPR = 1, W = 0, H = 0, raf = null, running = false, inView = false, t0 = 0;
 
-  // Domain clusters -> one connected graph: colored points that twinkle & drift,
-  // intra-cluster k-NN edges + inter-cluster bridges, with signal pulses flowing
-  // across the whole network. Colored (never white) soft halos on source-over.
+  // Domain clusters -> one connected graph: bigger, brighter colored points that
+  // twinkle & drift; dense intra-cluster k-NN edges + multiple inter-cluster
+  // bridges; glowing signal pulses flow across the whole network.
   var CL = [
-    { h: 190, cx: 0.69, cy: 0.28, n: 26 }, // Earth Observation  (cyan)
-    { h: 262, cx: 0.88, cy: 0.48, n: 26 }, // Digital Pathology  (violet)
-    { h: 158, cx: 0.585, cy: 0.62, n: 22 }, // Microscopy        (emerald)
-    { h: 38,  cx: 0.82, cy: 0.82, n: 20 }, // Annotation Systems (amber)
-    { h: 222, cx: 0.66, cy: 0.44, n: 26 }  // Foundation Models  (blue)
+    { h: 190, cx: 0.68, cy: 0.27, n: 28 }, // Earth Observation  (cyan)
+    { h: 262, cx: 0.89, cy: 0.47, n: 28 }, // Digital Pathology  (violet)
+    { h: 158, cx: 0.575, cy: 0.63, n: 24 }, // Microscopy        (emerald)
+    { h: 38,  cx: 0.83, cy: 0.83, n: 22 }, // Annotation Systems (amber)
+    { h: 222, cx: 0.65, cy: 0.44, n: 28 }  // Foundation Models  (blue)
   ];
   var pts = [], edges = [], pulses = [], glow = [];
   var seed = 9;
   function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
   function gauss(){ return (rnd() + rnd() + rnd() - 1.5) / 1.5; }
-  function leftFade(x){ var f = (x / W - 0.24) / 0.30; return f < 0 ? 0 : (f > 1 ? 1 : f); }
+  function leftFade(x){ var f = (x / W - 0.20) / 0.30; return f < 0 ? 0 : (f > 1 ? 1 : f); }
   function dist2(a, b){ var dx = a.bx - b.bx, dy = a.by - b.by; return dx * dx + dy * dy; }
 
-  var SPR = 50;
+  var SPR = 60;
   function makeGlow(h){
     var s = document.createElement('canvas'); s.width = s.height = SPR;
     var g = s.getContext('2d');
     var r = g.createRadialGradient(SPR/2, SPR/2, 0, SPR/2, SPR/2, SPR/2);
-    r.addColorStop(0, 'hsla(' + h + ' 90% 63% / .85)');
-    r.addColorStop(0.4, 'hsla(' + h + ' 85% 56% / .30)');
-    r.addColorStop(1, 'hsla(' + h + ' 85% 56% / 0)');
+    r.addColorStop(0, 'hsla(' + h + ' 92% 64% / .9)');
+    r.addColorStop(0.4, 'hsla(' + h + ' 86% 56% / .34)');
+    r.addColorStop(1, 'hsla(' + h + ' 86% 56% / 0)');
     g.fillStyle = r; g.fillRect(0, 0, SPR, SPR); return s;
   }
 
   function spawnPulse(){
     if (!edges.length) return;
-    pulses.push({ e: edges[(Math.random() * edges.length) | 0], t: Math.random(), sp: 0.006 + Math.random() * 0.010 });
+    pulses.push({ e: edges[(Math.random() * edges.length) | 0], t: Math.random(), sp: 0.006 + Math.random() * 0.011 });
   }
 
   function build(){
@@ -1582,32 +1582,33 @@ html.pdrawer-lock body{ overflow:hidden; }
     glow = CL.map(function(c){ return makeGlow(c.h); });
     var byCluster = [];
     for (var c = 0; c < CL.length; c++){
-      var C = CL[c], sx = W * 0.062, sy = H * 0.105, n = W < 700 ? Math.round(C.n * 0.55) : C.n, arr = [];
+      var C = CL[c], sx = W * 0.072, sy = H * 0.12, n = W < 700 ? Math.round(C.n * 0.55) : C.n, arr = [];
       for (var i = 0; i < n; i++){
         var x = C.cx * W + gauss() * sx, y = C.cy * H + gauss() * sy;
-        var p = { c: c, h: C.h, x: x, y: y, bx: x, by: y, r: 1.6 + rnd() * 1.9,
-          tw: rnd() * 6.28, tsp: 0.6 + rnd() * 1.1, vx: (rnd() - 0.5) * 0.06, vy: (rnd() - 0.5) * 0.06, flash: 0 };
+        var p = { c: c, h: C.h, x: x, y: y, bx: x, by: y, r: 2.0 + rnd() * 2.3,
+          tw: rnd() * 6.28, tsp: 0.6 + rnd() * 1.1, vx: (rnd() - 0.5) * 0.07, vy: (rnd() - 0.5) * 0.07, flash: 0 };
         pts.push(p); arr.push(p);
       }
       byCluster.push(arr);
     }
-    // intra-cluster edges: 3 nearest neighbours (triangulated, graph-like)
+    // intra-cluster edges: 4 nearest neighbours (denser mesh)
     for (var a = 0; a < pts.length; a++){
       var pa = pts[a], cand = [];
       for (var b = 0; b < pts.length; b++){ if (b === a || pts[b].c !== pa.c) continue; cand.push([dist2(pa, pts[b]), b]); }
       cand.sort(function(u, v){ return u[0] - v[0]; });
-      for (var k = 0; k < Math.min(3, cand.length); k++){ var bi = cand[k][1]; if (bi > a) edges.push({ a: pa, b: pts[bi], h1: pa.h, h2: pa.h, bridge: false }); }
+      for (var k = 0; k < Math.min(4, cand.length); k++){ var bi = cand[k][1]; if (bi > a) edges.push({ a: pa, b: pts[bi], h1: pa.h, h2: pa.h, bridge: false }); }
     }
-    // inter-cluster bridges: closest cross-cluster pair, chained into a ring so
-    // the whole thing is ONE connected graph
-    function addBridge(ci, cj){
-      var A = byCluster[ci], B = byCluster[cj], best = null, bd = Infinity;
-      for (var i = 0; i < A.length; i++) for (var j = 0; j < B.length; j++){ var d = dist2(A[i], B[j]); if (d < bd){ bd = d; best = [A[i], B[j]]; } }
-      if (best) edges.push({ a: best[0], b: best[1], h1: CL[ci].h, h2: CL[cj].h, bridge: true });
+    // inter-cluster bridges: the N closest cross-cluster point pairs, over many
+    // cluster pairs -> a richly interconnected network
+    function addBridge(ci, cj, count){
+      var A = byCluster[ci], B = byCluster[cj], pairs = [];
+      for (var i = 0; i < A.length; i++) for (var j = 0; j < B.length; j++) pairs.push([dist2(A[i], B[j]), A[i], B[j]]);
+      pairs.sort(function(u, v){ return u[0] - v[0]; });
+      for (var k = 0; k < Math.min(count, pairs.length); k++) edges.push({ a: pairs[k][1], b: pairs[k][2], h1: CL[ci].h, h2: CL[cj].h, bridge: true });
     }
-    var order = [0, 4, 1, 3, 2];
-    for (var o = 0; o < order.length; o++) addBridge(order[o], order[(o + 1) % order.length]);
-    for (var s2 = 0; s2 < 12; s2++) spawnPulse();
+    var bridges = [[0,4],[4,1],[1,3],[3,2],[2,0],[0,1],[3,4],[4,2]];
+    for (var o = 0; o < bridges.length; o++) addBridge(bridges[o][0], bridges[o][1], 2);
+    for (var s2 = 0; s2 < 18; s2++) spawnPulse();
   }
 
   function frame(ts){
@@ -1617,48 +1618,50 @@ html.pdrawer-lock body{ overflow:hidden; }
     if (!reduce){
       for (var i = 0; i < pts.length; i++){ var p = pts[i];
         p.x += p.vx; p.y += p.vy; p.vx += (p.bx - p.x) * 0.0018; p.vy += (p.by - p.y) * 0.0018; p.vx *= 0.99; p.vy *= 0.99;
-        if (p.flash > 0) p.flash -= 0.045;
-        if (Math.random() < 0.0016) p.flash = 1;
+        if (p.flash > 0) p.flash -= 0.04;
+        if (Math.random() < 0.0024) p.flash = 1;
       }
     }
     // edges (intra solid cluster colour; bridges gradient between two domains)
     for (var e = 0; e < edges.length; e++){ var ed = edges[e], A = ed.a, B = ed.b;
       var lf = leftFade((A.x + B.x) / 2); if (lf <= 0) continue;
       if (ed.bridge){
-        ctx.lineWidth = 1.1;
+        ctx.lineWidth = 1.4;
         var g = ctx.createLinearGradient(A.x, A.y, B.x, B.y);
-        g.addColorStop(0, 'hsl(' + ed.h1 + ' 82% 64% / ' + (0.17 * lf).toFixed(3) + ')');
-        g.addColorStop(1, 'hsl(' + ed.h2 + ' 82% 64% / ' + (0.17 * lf).toFixed(3) + ')');
+        g.addColorStop(0, 'hsl(' + ed.h1 + ' 85% 66% / ' + (0.26 * lf).toFixed(3) + ')');
+        g.addColorStop(1, 'hsl(' + ed.h2 + ' 85% 66% / ' + (0.26 * lf).toFixed(3) + ')');
         ctx.strokeStyle = g;
       } else {
-        ctx.lineWidth = 1;
-        ctx.strokeStyle = 'hsl(' + ed.h1 + ' 72% 62% / ' + (0.19 * lf).toFixed(3) + ')';
+        ctx.lineWidth = 1.2;
+        ctx.strokeStyle = 'hsl(' + ed.h1 + ' 74% 64% / ' + (0.26 * lf).toFixed(3) + ')';
       }
       ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
     }
     ctx.lineWidth = 1;
     // glow + colored cores (twinkle + sparkle flare)
     for (var k = 0; k < pts.length; k++){ var q = pts[k], f = leftFade(q.x); if (f <= 0) continue;
-      var tw = reduce ? 0.7 : (0.55 + 0.45 * Math.sin(t * q.tsp + q.tw));
+      var tw = reduce ? 0.72 : (0.55 + 0.45 * Math.sin(t * q.tsp + q.tw));
       var fl = q.flash > 0 ? q.flash : 0;
-      var ga = (0.20 + 0.16 * tw + 0.40 * fl) * f;
-      var gsz = SPR * (0.6 + 0.5 * tw + 0.7 * fl) * (0.55 + q.r * 0.22);
+      var ga = (0.26 + 0.18 * tw + 0.45 * fl) * f;
+      var gsz = SPR * (0.62 + 0.5 * tw + 0.8 * fl) * (0.55 + q.r * 0.22);
       ctx.globalAlpha = ga < 0 ? 0 : (ga > 1 ? 1 : ga);
       ctx.drawImage(glow[q.c], q.x - gsz / 2, q.y - gsz / 2, gsz, gsz);
       ctx.globalAlpha = 1;
-      var ca = (0.6 + 0.3 * tw + 0.4 * fl) * f;
-      ctx.fillStyle = 'hsl(' + q.h + ' 88% ' + (66 + fl * 14) + '% / ' + (ca > 1 ? 1 : ca).toFixed(3) + ')';
+      var ca = (0.7 + 0.3 * tw + 0.42 * fl) * f;
+      ctx.fillStyle = 'hsl(' + q.h + ' 90% ' + (66 + fl * 14) + '% / ' + (ca > 1 ? 1 : ca).toFixed(3) + ')';
       ctx.beginPath(); ctx.arc(q.x, q.y, q.r * (1 + 0.45 * tw + fl), 0, 6.2832); ctx.fill();
     }
-    // signal pulses traveling along the graph edges
+    // glowing signal pulses traveling along the graph edges
     if (!reduce){
       for (var u = pulses.length - 1; u >= 0; u--){ var pl = pulses[u]; pl.t += pl.sp;
         if (pl.t >= 1){ pulses.splice(u, 1); spawnPulse(); continue; }
         var A2 = pl.e.a, B2 = pl.e.b, px = A2.x + (B2.x - A2.x) * pl.t, py = A2.y + (B2.y - A2.y) * pl.t, pf = leftFade(px);
         if (pf <= 0) continue;
         var hue = pl.t < 0.5 ? pl.e.h1 : pl.e.h2;
-        ctx.fillStyle = 'hsl(' + hue + ' 95% 80% / ' + (0.9 * pf).toFixed(3) + ')';
-        ctx.beginPath(); ctx.arc(px, py, 2.0, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = 'hsl(' + hue + ' 95% 72% / ' + (0.22 * pf).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(px, py, 6.0, 0, 6.2832); ctx.fill();
+        ctx.fillStyle = 'hsl(' + hue + ' 98% 86% / ' + (0.95 * pf).toFixed(3) + ')';
+        ctx.beginPath(); ctx.arc(px, py, 2.4, 0, 6.2832); ctx.fill();
       }
     }
     if (running && !reduce) raf = requestAnimationFrame(frame);
