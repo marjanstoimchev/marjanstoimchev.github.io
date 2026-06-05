@@ -270,8 +270,8 @@
     @keyframes drift2 { to { transform:translate(6%,-5%) scale(1.1); } }
     @keyframes drift3 { to { transform:translate(-6%,-4%) scale(1.06); } }
     #latent { position:absolute; inset:0; z-index:0; pointer-events:none;
-      -webkit-mask-image:radial-gradient(120% 90% at 78% 35%, #000 35%, transparent 78%);
-      mask-image:radial-gradient(120% 90% at 78% 35%, #000 35%, transparent 78%); opacity:1; }
+      -webkit-mask-image:radial-gradient(135% 125% at 71% 49%, #000 56%, transparent 92%);
+      mask-image:radial-gradient(135% 125% at 71% 49%, #000 56%, transparent 92%); opacity:1; }
     .hero-grid { position:relative; z-index:2; display:grid; grid-template-columns:1fr 340px; gap:clamp(2rem,4vw,3.5rem); align-items:start; }
 
     .eyebrow { display:inline-flex; align-items:center; gap:.6rem; font-family:var(--font-mono); font-size:.78rem;
@@ -1541,24 +1541,24 @@ html.pdrawer-lock body{ overflow:hidden; }
   var ctx = canvas.getContext('2d');
   var DPR = 1, W = 0, H = 0, raf = null, running = false, inView = false, t0 = 0;
 
-  // Domain clusters -> one connected graph: bigger, brighter colored points that
-  // twinkle & drift; dense intra-cluster k-NN edges + multiple inter-cluster
-  // bridges; glowing signal pulses flow across the whole network.
+  // Domain clusters -> one connected graph, contained within the visible region
+  // so nothing (and no bridge) is clipped. Big, bright, twinkling points with a
+  // dense intra-cluster mesh + inter-cluster bridges and flowing signal pulses.
   var CL = [
-    { h: 190, cx: 0.68, cy: 0.27, n: 28 }, // Earth Observation  (cyan)
-    { h: 262, cx: 0.89, cy: 0.47, n: 28 }, // Digital Pathology  (violet)
-    { h: 158, cx: 0.575, cy: 0.63, n: 24 }, // Microscopy        (emerald)
-    { h: 38,  cx: 0.83, cy: 0.83, n: 22 }, // Annotation Systems (amber)
-    { h: 222, cx: 0.65, cy: 0.44, n: 28 }  // Foundation Models  (blue)
+    { h: 190, cx: 0.64, cy: 0.30, n: 28 }, // Earth Observation  (cyan)
+    { h: 262, cx: 0.81, cy: 0.46, n: 28 }, // Digital Pathology  (violet)
+    { h: 158, cx: 0.575, cy: 0.60, n: 24 }, // Microscopy        (emerald)
+    { h: 38,  cx: 0.73, cy: 0.70, n: 22 }, // Annotation Systems (amber)
+    { h: 222, cx: 0.66, cy: 0.44, n: 28 }  // Foundation Models  (blue)
   ];
   var pts = [], edges = [], pulses = [], glow = [];
   var seed = 9;
   function rnd(){ seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; }
-  function gauss(){ return (rnd() + rnd() + rnd() - 1.5) / 1.5; }
+  function gauss(){ var g = (rnd() + rnd() + rnd() - 1.5) / 1.5; return g < -1.6 ? -1.6 : (g > 1.6 ? 1.6 : g); }
   function leftFade(x){ var f = (x / W - 0.20) / 0.30; return f < 0 ? 0 : (f > 1 ? 1 : f); }
   function dist2(a, b){ var dx = a.bx - b.bx, dy = a.by - b.by; return dx * dx + dy * dy; }
 
-  var SPR = 60;
+  var SPR = 58;
   function makeGlow(h){
     var s = document.createElement('canvas'); s.width = s.height = SPR;
     var g = s.getContext('2d');
@@ -1582,24 +1582,21 @@ html.pdrawer-lock body{ overflow:hidden; }
     glow = CL.map(function(c){ return makeGlow(c.h); });
     var byCluster = [];
     for (var c = 0; c < CL.length; c++){
-      var C = CL[c], sx = W * 0.072, sy = H * 0.12, n = W < 700 ? Math.round(C.n * 0.55) : C.n, arr = [];
+      var C = CL[c], sx = W * 0.055, sy = H * 0.09, n = W < 700 ? Math.round(C.n * 0.55) : C.n, arr = [];
       for (var i = 0; i < n; i++){
         var x = C.cx * W + gauss() * sx, y = C.cy * H + gauss() * sy;
-        var p = { c: c, h: C.h, x: x, y: y, bx: x, by: y, r: 2.0 + rnd() * 2.3,
+        var p = { c: c, h: C.h, x: x, y: y, bx: x, by: y, r: 2.0 + rnd() * 2.2,
           tw: rnd() * 6.28, tsp: 0.6 + rnd() * 1.1, vx: (rnd() - 0.5) * 0.07, vy: (rnd() - 0.5) * 0.07, flash: 0 };
         pts.push(p); arr.push(p);
       }
       byCluster.push(arr);
     }
-    // intra-cluster edges: 4 nearest neighbours (denser mesh)
     for (var a = 0; a < pts.length; a++){
       var pa = pts[a], cand = [];
       for (var b = 0; b < pts.length; b++){ if (b === a || pts[b].c !== pa.c) continue; cand.push([dist2(pa, pts[b]), b]); }
       cand.sort(function(u, v){ return u[0] - v[0]; });
       for (var k = 0; k < Math.min(4, cand.length); k++){ var bi = cand[k][1]; if (bi > a) edges.push({ a: pa, b: pts[bi], h1: pa.h, h2: pa.h, bridge: false }); }
     }
-    // inter-cluster bridges: the N closest cross-cluster point pairs, over many
-    // cluster pairs -> a richly interconnected network
     function addBridge(ci, cj, count){
       var A = byCluster[ci], B = byCluster[cj], pairs = [];
       for (var i = 0; i < A.length; i++) for (var j = 0; j < B.length; j++) pairs.push([dist2(A[i], B[j]), A[i], B[j]]);
@@ -1622,7 +1619,6 @@ html.pdrawer-lock body{ overflow:hidden; }
         if (Math.random() < 0.0024) p.flash = 1;
       }
     }
-    // edges (intra solid cluster colour; bridges gradient between two domains)
     for (var e = 0; e < edges.length; e++){ var ed = edges[e], A = ed.a, B = ed.b;
       var lf = leftFade((A.x + B.x) / 2); if (lf <= 0) continue;
       if (ed.bridge){
@@ -1638,7 +1634,6 @@ html.pdrawer-lock body{ overflow:hidden; }
       ctx.beginPath(); ctx.moveTo(A.x, A.y); ctx.lineTo(B.x, B.y); ctx.stroke();
     }
     ctx.lineWidth = 1;
-    // glow + colored cores (twinkle + sparkle flare)
     for (var k = 0; k < pts.length; k++){ var q = pts[k], f = leftFade(q.x); if (f <= 0) continue;
       var tw = reduce ? 0.72 : (0.55 + 0.45 * Math.sin(t * q.tsp + q.tw));
       var fl = q.flash > 0 ? q.flash : 0;
@@ -1651,7 +1646,6 @@ html.pdrawer-lock body{ overflow:hidden; }
       ctx.fillStyle = 'hsl(' + q.h + ' 90% ' + (66 + fl * 14) + '% / ' + (ca > 1 ? 1 : ca).toFixed(3) + ')';
       ctx.beginPath(); ctx.arc(q.x, q.y, q.r * (1 + 0.45 * tw + fl), 0, 6.2832); ctx.fill();
     }
-    // glowing signal pulses traveling along the graph edges
     if (!reduce){
       for (var u = pulses.length - 1; u >= 0; u--){ var pl = pulses[u]; pl.t += pl.sp;
         if (pl.t >= 1){ pulses.splice(u, 1); spawnPulse(); continue; }
